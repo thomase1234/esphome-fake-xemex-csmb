@@ -40,20 +40,39 @@ bool ModbusServer::add_holding_register(uint16_t start_address, uint16_t value, 
   return mb.addHreg(start_address, value, numregs);
 }
 
+bool ModbusServer::add_input_register(uint16_t start_address, uint16_t value, uint16_t numregs) {
+  return mb.addIreg(start_address, value, numregs);
+}    
+
 bool ModbusServer::write_holding_register(uint16_t address, uint16_t value) { return mb.Hreg(address, value); }
 
-uint16_t ModbusServer::read_holding_register(uint16_t address) { return mb.Hreg(address); }
+bool ModbusServer::write_input_register(uint16_t address, uint16_t value) { return mb.Ireg(address, value); }    
 
+uint16_t ModbusServer::read_holding_register(uint16_t address) { return mb.Hreg(address); }
+    
+uint16_t ModbusServer::read_input_register(uint16_t address) { return mb.Ireg(address); }
+    
 void ModbusServer::on_read_holding_register(uint16_t address, cbOnReadWrite cb, uint16_t numregs) {
   mb.onGet(
       HREG(address), [cb](TRegister *reg, uint16_t val) -> uint16_t { return cb(reg->address.address, val); }, numregs);
 }
 
+void ModbusServer::on_read_input_register(uint16_t address, cbOnReadWrite cb, uint16_t numregs) {
+  mb.onGet(
+      IREG(address), [cb](TRegister *reg, uint16_t val) -> uint16_t { return cb(reg->address.address, val); }, numregs);
+}    
+    
 void ModbusServer::on_write_holding_register(uint16_t address, cbOnReadWrite cb, uint16_t numregs) {
   mb.onSet(
       HREG(address), [cb](TRegister *reg, uint16_t val) -> uint16_t { return cb(reg->address.address, val); }, numregs);
 }
 
+    void ModbusServer::on_write_input_register(uint16_t address, cbOnReadWrite cb, uint16_t numregs) {
+  mb.onSet(
+      IREG(address), [cb](TRegister *reg, uint16_t val) -> uint16_t { return cb(reg->address.address, val); }, numregs);
+}
+
+    
 // Stream class implementation:
 size_t ModbusServer::write(uint8_t data) {
     if (( (re_pin_ != nullptr) || (de_pin_ != nullptr) ) && !sending) {
