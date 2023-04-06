@@ -318,59 +318,55 @@ modbus_server:
 
         - start_address: 342
           default: 0 #  Total active energy kwh
-          number: 0
+          number: 1
           on_read:
             ESP_LOGI("ON_READ", "This is a lambda. address=%d, value=%d", address, value);
             return value; // you can return the stored value or something else.
         - start_address: 343
           default: 0 #  Total active energy kwh
-          number: 034
+          number: 1
           on_read:
             ESP_LOGI("ON_READ", "This is a lambda. address=%d, value=%d", address, value);
             return value; // you can return the stored value or something else.  
 
         - start_address: 344
           default: 0 #  Total reactive energy kvarh
-          number: 0
+          number: 1
           on_read:
             ESP_LOGI("ON_READ", "This is a lambda. address=%d, value=%d", address, value);
             return value; // you can return the stored value or something else.
         - start_address: 345
           default: 0 #  Total reactive energy kvarh
-          number: 034
+          number: 1
           on_read:
             ESP_LOGI("ON_READ", "This is a lambda. address=%d, value=%d", address, value);
             return value; // you can return the stored value or something else.  
 
         - start_address: 384
           default: 0 #  Current resettable total active energy kwh
-          number: 0
+          number: 1
           on_read:
             ESP_LOGI("ON_READ", "This is a lambda. address=%d, value=%d", address, value);
             return value; // you can return the stored value or something else.
         - start_address: 385
           default: 0 #  Current resettable total active energy kwh
-          number: 034
+          number: 1
           on_read:
             ESP_LOGI("ON_READ", "This is a lambda. address=%d, value=%d", address, value);
             return value; // you can return the stored value or something else.  
 
         - start_address: 386
           default: 0 #  Current resettable total reactive energy kvarh
-          number: 0
+          number: 1
           on_read:
             ESP_LOGI("ON_READ", "This is a lambda. address=%d, value=%d", address, value);
             return value; // you can return the stored value or something else.
         - start_address: 387
           default: 0 #  Current resettable total reactive energy kvarh
-          number: 034
+          number: 1
           on_read:
             ESP_LOGI("ON_READ", "This is a lambda. address=%d, value=%d", address, value);
             return value; // you can return the stored value or something else.  
-
-
-
-
 
             # example return based on the value of tspd number template below
             # return id(tspd).state; // you can return the stored value or something else.
