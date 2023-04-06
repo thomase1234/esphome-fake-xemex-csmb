@@ -46,28 +46,58 @@ class ModbusServer : public esphome::uart::UARTDevice, public Component, public 
   /// @return true if successful
   bool add_holding_register(uint16_t start_address, uint16_t value, uint16_t numregs = 1);
 
+  /// @brief Adds a new range of input registers
+  /// @param start_address Address of the first register
+  /// @param value Default value for the registers
+  /// @param numregs Number of registers in the range
+  /// @return true if successful
+  bool add_input_register(uint16_t start_address, uint16_t value, uint16_t numregs = 1);
+
   /// @brief Sets a holding register to the specified value
   /// @param address Address of the register
   /// @param value New value for the register
   /// @return true if successful
   bool write_holding_register(uint16_t address, uint16_t value);
 
-  /// @brief Retrieves the current value of the given register
+  /// @brief Sets an input register to the specified value
+  /// @param address Address of the register
+  /// @param value New value for the register
+  /// @return true if successful
+  bool write_input_register(uint16_t address, uint16_t value);
+
+  /// @brief Retrieves the current value of the given holding register
   /// @param address Address of the register to read
   /// @return the register value
   uint16_t read_holding_register(uint16_t address);
 
-  /// @brief Sets a callback to be invoked when the specified register range is read
+  /// @brief Retrieves the current value of the given input register
+  /// @param address Address of the register to read
+  /// @return the register value
+  uint16_t read_input_register(uint16_t address);
+
+  /// @brief Sets a callback to be invoked when the specified holding register range is read
   /// @param address start address of the register range to watch
   /// @param cb callback to be called when a register is read. The callback can return a new value to be sent
   /// @param numregs number of registers to watch
   void on_read_holding_register(uint16_t address, cbOnReadWrite cb, uint16_t numregs = 1);
 
-  /// @brief Sets a callback to be invoked when the specified register range is written
+  /// @brief Sets a callback to be invoked when the specified input register range is read
+  /// @param address start address of the register range to watch
+  /// @param cb callback to be called when a register is read. The callback can return a new value to be sent
+  /// @param numregs number of registers to watch
+  void on_read_input_register(uint16_t address, cbOnReadWrite cb, uint16_t numregs = 1);
+
+  /// @brief Sets a callback to be invoked when the specified holding register range is written
   /// @param address start address of the register range to watch
   /// @param cb callback to be called when a register is written
   /// @param numregs number of registers to watch
   void on_write_holding_register(uint16_t address, cbOnReadWrite cb, uint16_t numregs = 1);
+
+  /// @brief Sets a callback to be invoked when the specified input register range is written
+  /// @param address start address of the register range to watch
+  /// @param cb callback to be called when a register is written
+  /// @param numregs number of registers to watch
+  void on_write_input_register(uint16_t address, cbOnReadWrite cb, uint16_t numregs = 1);
 
   // Stream implementation required by ModbusRTU library
   size_t write(uint8_t);
