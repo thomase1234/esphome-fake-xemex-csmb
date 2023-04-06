@@ -1,37 +1,6 @@
 ``` yaml
-esphome:
-  name: sdm-test03
-  friendly_name: sdm-test03
-
-esp32:
-  board: esp32dev
-  framework:
-    type: arduino
-
-# Enable logging
-logger:
-
-# Enable Home Assistant API
-api:
-  encryption:
-    key: "xxx"
-
-ota:
-  password: "xxx"
-
-wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
-
-  # Enable fallback hotspot (captive portal) in case wifi connection fails
-  ap:
-    ssid: "Sdm-Test03 Fallback Hotspot"
-    password: "xxx"
-
-captive_portal:
-
 external_components:
-  - source: github://aj-nagrom/esphome-modbus-server@master
+  - source: github://That-Dude/esphome-fake-eastron-SDM230@master
     refresh: 60s
     components:
       - modbus_server
@@ -64,14 +33,15 @@ modbus_server:
           ESP_LOGI("ON_READ", "This is a lambda. address=%d, value=%d", address, value);
           return value; // you can return the stored value or something else.
 
-      - start_address: 100 # starting register range
-        default: 99 # default value for all those registers
-        number: 10 # number of registers in the range
-        on_read: | # called whenever a register in the range is read
-          // 'address' contains the requested register address
-          // 'value' contains the stored register value 
-          ESP_LOGI("ON_READ", "This is a lambda. address=%d, value=%d", address, value);
-          return id(tspd).state; // you can return the stored value or something else.
+    input_registers:
+        - start_address: 79 # starting register range
+          default: 82 # default value for all those registers
+          number: 10 # number of registers in the range
+          on_read: | # called whenever a register in the range is read
+            // 'address' contains the requested register address
+            // 'value' contains the stored register value 
+            ESP_LOGI("ON_READ", "This is a lambda. address=%d, value=%d", address, value);
+            return id(tspd).state; // you can return the stored value or something else.
 
 
 # Creates a number slider in Home Assistant that allows you to set the value of a register
