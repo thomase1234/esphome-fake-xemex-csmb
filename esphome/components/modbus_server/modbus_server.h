@@ -31,6 +31,14 @@ class ModbusServer : public esphome::uart::UARTDevice, public Component, public 
   /// @param address the slave address this instance will respond as
   void set_address(uint8_t address);
 
+  /// @brief Sets the DE pin and toggles it on read/write
+  /// @param pin_de is the pin to set LOW when transmitting
+  void set_de_pin(GPIOPin *de_pin);
+
+  /// @brief Sets the RE pin and toggles it on read/write
+  /// @param pin_re is the pin to set LOW when reading
+  void set_re_pin(GPIOPin *re_pin);
+
   /// @brief Adds a new range of holding registers
   /// @param start_address Address of the first register
   /// @param value Default value for the registers
@@ -70,6 +78,9 @@ class ModbusServer : public esphome::uart::UARTDevice, public Component, public 
 
  private:
   ModbusRTU mb;  // ModbusRTU instance, the man behind the curtain
+  GPIOPin *re_pin_{nullptr};
+  GPIOPin *de_pin_{nullptr};
+  bool sending;
 };
 
 }  // namespace modbus_server
