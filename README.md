@@ -1,3 +1,4 @@
+``` yaml
 esphome:
   name: sdm-test03
   friendly_name: sdm-test03
@@ -82,3 +83,4 @@ number:
     min_value: 0 # this is the default on boot
     max_value: 10000
     step: 100
+```
