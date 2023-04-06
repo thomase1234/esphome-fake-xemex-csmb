@@ -84,3 +84,7 @@ number:
     max_value: 10000
     step: 100
 ```
+
+## The module I used
+![RS485-module-shield](https://user-images.githubusercontent.com/6509533/230406441-bd38df26-a72c-4a37-88c1-631ec2d2cfe7.jpg)
+
