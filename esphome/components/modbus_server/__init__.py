@@ -98,6 +98,42 @@ async def to_code(config):
                     )
                 )
 
+    if "input_registers" in config:
+        for reg in config["input_registers"]:
+            cg.add(
+                server.add_input_register(
+                    reg[CONF_START_ADDRESS], reg[CONF_DEFAULT], reg[CONF_NUMBER]
+                )
+            )
+            if CONF_ON_READ in reg:
+                template_ = await cg.process_lambda(
+                    reg[CONF_ON_READ],
+                    [
+                        (cg.uint16, "address"),
+                        (cg.uint16, "value"),
+                    ],
+                    return_type=cg.uint16,
+                )
+                cg.add(
+                    server.on_read_input_register(
+                        reg[CONF_START_ADDRESS], template_, reg[CONF_NUMBER]
+                    )
+                )
+            if CONF_ON_WRITE in reg:
+                template_ = await cg.process_lambda(
+                    reg[CONF_ON_WRITE],
+                    [
+                        (cg.uint16, "address"),
+                        (cg.uint16, "value"),
+                    ],
+                    return_type=cg.uint16,
+                )
+                cg.add(
+                    server.on_write_input_register(
+                        reg[CONF_START_ADDRESS], template_, reg[CONF_NUMBER]
+                    )
+                )                
+                
     await cg.register_component(server, config)
 
     return
