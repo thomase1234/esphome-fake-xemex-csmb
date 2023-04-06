@@ -36,6 +36,17 @@ CONFIG_SCHEMA = (
                     }
                 )
             ),
+            cv.Optional("input_registers"): cv.ensure_list(
+                cv.Schema(
+                    {
+                        cv.Required(CONF_START_ADDRESS): cv.positive_int,
+                        cv.Optional(CONF_DEFAULT, 0): cv.positive_int,
+                        cv.Optional(CONF_NUMBER, 1): cv.positive_int,
+                        cv.Optional(CONF_ON_READ): cv.returning_lambda,
+                        cv.Optional(CONF_ON_WRITE): cv.returning_lambda,
+                    }
+                )
+            ),
         }
     )
     .extend(uart.UART_DEVICE_SCHEMA)
