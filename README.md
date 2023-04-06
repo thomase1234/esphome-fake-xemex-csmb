@@ -18,7 +18,7 @@ esp32:
     platform_version: '4.0.0'
 
 external_components:
-  - source: github://epiclabs-io/esphome-modbus-server@master
+  - source: github://aj-nagrom/esphome-modbus-server@master
     refresh: 60s
     components:
       - modbus_server
