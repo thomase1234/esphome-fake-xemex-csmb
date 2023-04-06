@@ -1,21 +1,33 @@
-# esphome-modbus-server
-ESPHome Modbus Server component
-
-
-Example configuration:
-
-```yaml
-
 esphome:
-  name: 'modbus-slave'
+  name: sdm-test03
+  friendly_name: sdm-test03
 
 esp32:
   board: esp32dev
-  variant: esp32
   framework:
     type: arduino
-    version: '2.0.2'
-    platform_version: '4.0.0'
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "xxx"
+
+ota:
+  password: "xxx"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Sdm-Test03 Fallback Hotspot"
+    password: "xxx"
+
+captive_portal:
 
 external_components:
   - source: github://aj-nagrom/esphome-modbus-server@master
@@ -23,21 +35,10 @@ external_components:
     components:
       - modbus_server
 
-# Enable logging
-logger:
-#  level: VERBOSE
-
-# Enable Home Assistant API
-api:
-ota:
-wifi:
-  ssid: YourSSID
-  password: YourPassword
-
 uart:
   - id: intmodbus
-    tx_pin: 13
-    rx_pin: 16
+    tx_pin: 17 # DI WHITE wire
+    rx_pin: 16 # RO BLUE  wire
     baud_rate: 9600
     stop_bits: 1
     data_bits: 8
@@ -49,8 +50,9 @@ modbus_server:
   - id: modbuserver
     uart_id: intmodbus
     address: 1 # slave address
-    re_pin: GPIO32 # optional
-    de_pin: GPIO14 # optional
+    #  - I used this module which reqired pins below http://domoticx.com/wp-content/uploads/2018/01/RS485-module-shield.jpg
+    re_pin: GPIO19 # optional
+    de_pin: GPIO18 # optional
     holding_registers:
       - start_address: 79 # starting register range
         default: 82 # default value for all those registers
@@ -60,18 +62,23 @@ modbus_server:
           // 'value' contains the stored register value 
           ESP_LOGI("ON_READ", "This is a lambda. address=%d, value=%d", address, value);
           return value; // you can return the stored value or something else.
-      - start_address: 200 # in this example we map register 200 to a switch
-        number: 1
-        on_write: |
-          if(value)
-            id(testswitch)->turn_on();
-          else
-            id(testswitch)->turn_off();
-          return value;
-        on_read: |
-          return id(testswitch)->state ? 1 : 0;
 
-switch:
-  - platform: gpio
-    pin: 2
-    id: testswitch
+      - start_address: 100 # starting register range
+        default: 99 # default value for all those registers
+        number: 10 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value 
+          ESP_LOGI("ON_READ", "This is a lambda. address=%d, value=%d", address, value);
+          return id(tspd).state; // you can return the stored value or something else.
+
+
+# Creates a number slider in Home Assistant that allows you to set the value of a register
+number:
+  - platform: template
+    name: "Total system power demand W"
+    id: tspd
+    optimistic: true
+    min_value: 0 # this is the default on boot
+    max_value: 10000
+    step: 100
