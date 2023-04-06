@@ -1,3 +1,13 @@
+** This is a work in progress **
+
+## Working
+ESPhome acting as a Slave/Client/Server that can be polled by a master (e.g. a solar inverter) and delivers IREGs and HREGs which can be controlled how ever you like.
+
+## Next steps
+Build out this config with the correct input regs for an SDM230 and populate with realistic values, then connect it to my inverter and see if accepts it or not.
+
+
+
 ``` yaml
 external_components:
   - source: github://That-Dude/esphome-fake-eastron-SDM230@master
