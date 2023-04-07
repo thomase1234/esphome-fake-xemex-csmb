@@ -9,6 +9,37 @@ Build out this config with the correct input regs for an SDM230 and populate wit
 
 
 ``` yaml
+esphome:
+  name: sdm230-test04
+  friendly_name: sdm230-test04
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "xxxxxx"
+
+ota:
+  password: "xxxxxx"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Sdm230-Test04 Fallback Hotspot"
+    password: "xxxxxx"
+
+captive_portal:
+
 external_components:
   - source: github://That-Dude/esphome-fake-eastron-SDM230@master
     refresh: 60s
@@ -386,3 +417,7 @@ number:
 ## The module I used
 ![RS485-module-shield](https://user-images.githubusercontent.com/6509533/230406441-bd38df26-a72c-4a37-88c1-631ec2d2cfe7.jpg)
 
+## Inverter modbus connection
+Growatt MIN 3600TL-X
+
+![Screenshot 2023-04-07 at 13 53 21](https://user-images.githubusercontent.com/6509533/230619695-b52cfe74-9f23-4acf-a55b-52fefa3c8346.jpg)
