@@ -1,10 +1,10 @@
 ** This is a work in progress **
 
 ## Working
-ESPhome acting as a Slave/Client/Server that can be polled by a master (e.g. a solar inverter) and delivers IREGs and HREGs which can be controlled how ever you like.
+ESPhome acting as a Slave/Client/Server that can be polled by a master (e.g. a solar inverter) and delivers IREGs and HREGs which can be controlled arbitratily, I'm planning to use the values from my Shelly EM, however I've included a return value examples that allows you to set the values directly from HomeAssistant for anyone using that.
 
 ## Next steps
-Build out this config with the correct input regs for an SDM230 and populate with realistic values, then connect it to my inverter and see if accepts it or not.
+Connect it to an inverter, enable export control in the inverter menu, and monitor the requests. I've just moved house and my inverter is in a box, so id anyone wants to try this and give me some feedback I would be greatful.
 
 
 
