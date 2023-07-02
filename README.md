@@ -1,5 +1,7 @@
 ** This is a work in progress **
 
+## This project emulates a Xemex CSMB which is used by the Shell Recharge 3.0 Advanced wall Charger
+
 ## Working
 ESPhome acting as a Slave/Client/Server that can be polled by a master (e.g. a solar inverter) and delivers IREGs and HREGs which can be controlled arbitratily, I'm planning to use the values from my Shelly EM, however I've included a return value examples that allows you to set the values directly from HomeAssistant for anyone using that.
 
