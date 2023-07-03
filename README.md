@@ -8,12 +8,25 @@ This project emulates a Xemex CSMB which is used by the Shell Recharge 3.0 Advan
 
 ESPhome acting as a Xemex CSMB by simulating a Modbus RTU Slave/Client/Server that can be polled by a master (e.g. a EV Wallbox like Shell Recharge Advanced 3.0) and delivers IREGs and HREGs which can be controlled arbitratily, I'm planning to use the values from my Shelly EM, however I've included a return value examples that allows you to set the values directly from HomeAssistant for anyone using that.
 
-The Xemex XSMB is used to measure the current on up to 3 phases in the home. Based on the actual power consumption, the Shell Recharge 3.0 can decrease or increase the power consumed by the connected car.
+The Xemex CSMB is used to measure the current on up to 3 phases in the home. Based on the actual power consumption, the Shell Recharge 3.0 can decrease or increase the power consumed by the connected car.
 
-## Install guides of Shell Advanced Recharge 3.0
+## External Documentation
+
+### Documentation on the Xemex CSMB
+
+https://xemex.eu/products/meters-sensors/csmb/
+https://xemex.eu/wp-content/uploads/2021/07/User-manual-CSMB-1.0.pdf
+Page 9 of the user manual contains info on the supported modbus functions.
+
+### Install guides of Shell Advanced Recharge 3.0
 
 https://a.storyblok.com/f/85281/x/e035ddb473/17srqic01_advanced-3-0_quick-installation-guide.pdf
 https://my-instructions.com/shellrecharge/advanced-3.0/?locale=en-GB
+
+### General Modbus Info
+
+https://esphome.io/components/modbus_controller.html
+https://www.modbustools.com/modbus.html
 
 ## Next steps
 
