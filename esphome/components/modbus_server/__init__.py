@@ -54,7 +54,7 @@ CONFIG_SCHEMA = (
 )
 
 MULTI_CONF = True
-CODEOWNERS = ["@jpeletier"]
+CODEOWNERS = ["@jpeletier","@thomase1234"]
 
 
 async def to_code(config):
