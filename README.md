@@ -14,18 +14,18 @@ The Xemex CSMB is used to measure the current on up to 3 phases in the home. Bas
 
 ### Documentation on the Xemex CSMB
 
-https://xemex.eu/products/meters-sensors/csmb/
-https://xemex.eu/wp-content/uploads/2021/07/User-manual-CSMB-1.0.pdf
+https://xemex.eu/products/meters-sensors/csmb/  
+https://xemex.eu/wp-content/uploads/2021/07/User-manual-CSMB-1.0.pdf  
 Page 9 of the user manual contains info on the supported modbus functions.
 
 ### Install guides of Shell Advanced Recharge 3.0
 
-https://a.storyblok.com/f/85281/x/e035ddb473/17srqic01_advanced-3-0_quick-installation-guide.pdf
+https://a.storyblok.com/f/85281/x/e035ddb473/17srqic01_advanced-3-0_quick-installation-guide.pdf  
 https://my-instructions.com/shellrecharge/advanced-3.0/?locale=en-GB
 
 ### General Modbus Info
 
-https://esphome.io/components/modbus_controller.html
+https://esphome.io/components/modbus_controller.html  
 https://www.modbustools.com/modbus.html
 
 ## Next steps
@@ -115,38 +115,55 @@ modbus_server:
     re_pin: GPIO19 # optional
     de_pin: GPIO18 # optional
 
-    # holding_registers: # I don't think these are required for my purposes
-    #   - start_address: 79 # starting register range
-    #     default: 82 # default value for all those registers
-    #     number: 2 # number of registers in the range
-    #     on_read: | # called whenever a register in the range is read
-    #       // 'address' contains the requested register address
-    #       // 'value' contains the stored register value
-    #       ESP_LOGI("ON_READ", "This is a lambda. address=%d, value=%d", address, value);
-    #       return value; // you can return the stored value or something else.
+    holding_registers:
+      # I've implemented some of the regs found in this PDF:
+      # https://xemex.eu/wp-content/uploads/2021/07/User-manual-CSMB-1.0.pdf
+      - start_address: 0x4000 # starting register range for Serial Number
+        default: 0xabcd # default value for all those registers
+        number: 2 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value
+          ESP_LOGI("ON_READ", "This is a lambda. address=%d, value=%d", address, value);
+          return value; // you can return the stored value or something else.
 
-    input_registers:
-      # I've implimented all of the regs found in this PDF:
-      # https://www.eastroneurope.com/images/uploads/products/protocol/SDM630_MODBUS_Protocol.pdf
+      - start_address: 0x4002 # starting register range for Device Code
+        default: 0x00 # default value for all those registers (VERIFY)
+        number: 1 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value
+          ESP_LOGI("ON_READ", "This is a lambda. address=%d, value=%d", address, value);
+          return value; // you can return the stored value or something else.
+
+      - start_address: 0x4003 # starting register range for Device Address
+        default: 0x1 # default value for all those registers
+        number: 1 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value
+          ESP_LOGI("ON_READ", "This is a lambda. address=%d, value=%d", address, value);
+          return value; // you can return the stored value or something else.
+
+
+
+
+#    input_registers:
+# 
 
       # However, most inverters are likely to only request (or only use) certain values.
       # E.g. My Growatt TLX3600 modbus master connected to mobus port B, requests first 14 regs
       # initially (01 04 00 00 00 0E 71 CE)
 
-      - start_address: 00
-        default: 240 # Line to neutral Volts
-        number: 1
-        on_read:
-          ESP_LOGI("ON_READ", "This is a lambda. address=%d, value=%d", address, value);
-          return value; // you can return the stored value or something else.
+#      - start_address: 00
+#        default: 240 # Line to neutral Volts
+#        number: 1
+#        on_read:
+#          ESP_LOGI("ON_READ", "This is a lambda. address=%d, value=%d", address, value);
+#          return value; // you can return the stored value or something else.
 ```
 
 ## The module I used
 
 ![RS485-module-shield](https://user-images.githubusercontent.com/6509533/230406441-bd38df26-a72c-4a37-88c1-631ec2d2cfe7.jpg)
 
-## Inverter modbus connection
-
-Growatt MIN 3600TL-X
-
-![Screenshot 2023-04-07 at 13 53 21](https://user-images.githubusercontent.com/6509533/230619695-b52cfe74-9f23-4acf-a55b-52fefa3c8346.jpg)
