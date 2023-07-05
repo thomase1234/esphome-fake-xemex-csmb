@@ -163,7 +163,7 @@ modbus_server:
 #          return value; // you can return the stored value or something else.
 ```
 
-## The module I used
+## The RS485 module I used
 
 Link to [amazon.com.be](https://www.amazon.com.be/-/nl/Fasizi-RS485-adapter-seri%C3%ABle-aansluiting/dp/B09Z2GTMJ8/)
 
