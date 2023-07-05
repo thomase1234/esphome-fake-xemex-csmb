@@ -165,5 +165,5 @@ modbus_server:
 
 ## The module I used
 
-![RS485-module-shield](https://user-images.githubusercontent.com/6509533/230406441-bd38df26-a72c-4a37-88c1-631ec2d2cfe7.jpg)
+![RS485-module](https://raw.githubusercontent.com/thomase1234/esphome-fake-xemex-csmb/thomas-dev/pictures/RS485_Adapter.jpg)
 
