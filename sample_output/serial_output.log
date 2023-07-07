@@ -1,0 +1,124 @@
+INFO ESPHome 2023.6.4
+INFO Reading configuration /config/esphome/modbus-server-xemex.yaml...
+INFO Updating https://github.com/thomase1234/esphome-fake-xemex-csmb.git@thomas-dev
+INFO Detected timezone 'Europe/Brussels'
+INFO Starting log output from hostname.domain_redacted using esphome API
+INFO Successfully connected to hostname.domain_redacted
+[11:25:54][I][app:102]: ESPHome version 2023.6.4 compiled on Jul  7 2023, 11:23:26
+[11:25:54][I][app:104]: Project MODBUS.Server-Xemex version 1
+[11:25:54][C][wifi:543]: WiFi:
+[11:25:54][C][wifi:379]:   Local MAC: AA:BB:CC:DD:EE:FF
+[11:25:54][C][wifi:380]:   SSID: 'xxx'[redacted]
+[11:25:54][C][wifi:381]:   IP Address: 192.168.6.123
+[11:25:54][C][wifi:383]:   BSSID: AA:BB:CC:DD:EE:EE[redacted]
+[11:25:54][C][wifi:384]:   Hostname: 'modbus-server-xemex'
+[11:25:54][C][wifi:386]:   Signal strength: -68 dB ▂▄▆█
+[11:25:54][C][wifi:390]:   Channel: 6
+[11:25:54][C][wifi:391]:   Subnet: 255.255.255.0
+[11:25:54][C][wifi:392]:   Gateway: 192.168.6.1
+[11:25:54][C][wifi:393]:   DNS1: 192.168.6.1
+[11:25:54][C][wifi:394]:   DNS2: 0.0.0.0
+[11:25:54][C][logger:301]: Logger:
+[11:25:54][C][logger:302]:   Level: DEBUG
+[11:25:54][C][logger:303]:   Log Baud Rate: 115200
+[11:25:54][C][logger:305]:   Hardware UART: UART0
+[11:25:54][C][uart.arduino_esp32:124]: UART Bus 1:
+[11:25:54][C][uart.arduino_esp32:125]:   TX Pin: GPIO18
+[11:25:54][C][uart.arduino_esp32:126]:   RX Pin: GPIO19
+[11:25:54][C][uart.arduino_esp32:128]:   RX Buffer Size: 256
+[11:25:54][C][uart.arduino_esp32:130]:   Baud Rate: 9600 baud
+[11:25:54][C][uart.arduino_esp32:131]:   Data Bits: 8
+[11:25:54][C][uart.arduino_esp32:132]:   Parity: EVEN
+[11:25:54][C][uart.arduino_esp32:133]:   Stop bits: 1
+[11:25:54][C][template.number:050]: Template Number 'setct1current'
+[11:25:54][C][template.number:051]:   Optimistic: NO
+[11:25:54][C][template.number:052]:   Update Interval: 2.0s
+[11:25:54][C][template.number:050]: Template Number 'setct2current'
+[11:25:54][C][template.number:051]:   Optimistic: NO
+[11:25:54][C][template.number:052]:   Update Interval: 2.0s
+[11:25:54][C][template.number:050]: Template Number 'setct3current'
+[11:25:54][C][template.number:051]:   Optimistic: NO
+[11:25:54][C][template.number:052]:   Update Interval: 2.0s
+[11:25:54][C][version.text_sensor:021]: Version Text Sensor 'modbus-server-xemex - ESPHome Version'
+[11:25:54][C][version.text_sensor:021]:   Icon: 'mdi:new-box'
+[11:25:54][C][homeassistant.time:010]: Home Assistant Time:
+[11:25:54][C][homeassistant.time:011]:   Timezone: 'CET-1CEST,M3.5.0,M10.5.0/3'
+[11:25:54][C][captive_portal:088]: Captive Portal:
+[11:25:54][C][web_server:161]: Web Server:
+[11:25:54][C][web_server:162]:   Address: hostname.domain_redacted:80
+[11:25:54][C][mdns:112]: mDNS:
+[11:25:54][C][mdns:113]:   Hostname: modbus-server-xemex
+[11:25:54][C][ota:093]: Over-The-Air Updates:
+[11:25:54][C][ota:094]:   Address: hostname.domain_redacted:3232
+[11:25:54][C][ota:097]:   Using Password.
+[11:25:54][C][api:138]: API Server:
+[11:25:54][C][api:139]:   Address: hostname.domain_redacted:6053
+[11:25:54][C][api:141]:   Using noise encryption: YES
+[11:25:54][C][wifi_info:009]: WifiInfo IPAddress 'modbus-server-xemex - IP Address'
+[11:25:54][C][wifi_info:011]: WifiInfo SSID 'modbus-server-xemex - Wi-Fi SSID'
+[11:25:54][C][wifi_info:012]: WifiInfo BSSID 'modbus-server-xemex - Wi-Fi BSSID'
+[11:27:12][I][ON_READ:120]: This is a lambda. address=0x4002, value=20802
+[11:27:12][D][uart_debug:114]: <<< 01:03:40:02:00:01:30:0A
+[11:27:12][D][uart_debug:114]: >>> 01:03:02:51:42:05:E5
+[11:27:16][I][ON_READ:120]: This is a lambda. address=0x4002, value=20802
+[11:27:16][D][uart_debug:114]: <<< 01:03:40:02:00:01:30:0A
+[11:27:16][D][uart_debug:114]: >>> 01:03:02:51:42:05:E5
+[11:27:19][I][ON_READ:120]: This is a lambda. address=0x4002, value=20802
+[11:27:19][D][uart_debug:114]: <<< 01:03:40:02:00:01:30:0A
+[11:27:19][D][uart_debug:114]: >>> 01:03:02:51:42:05:E5
+[11:27:20][I][ON_READ:246]: This is a lambda. address=0x500c, value=0
+[11:27:20][I][ON_READ:255]: This is a lambda. address=0x500d, value=0
+[11:27:20][I][ON_READ:264]: This is a lambda. address=0x500e, value=0
+[11:27:20][I][ON_READ:273]: This is a lambda. address=0x500f, value=0
+[11:27:20][I][ON_READ:282]: This is a lambda. address=0x5010, value=0
+[11:27:20][I][ON_READ:291]: This is a lambda. address=0x5011, value=0
+[11:27:20][D][uart_debug:114]: <<< 01:03:50:0C:00:06:14:CB
+[11:27:21][D][uart_debug:114]: >>> 01:03:0C:00:00:00:00:00:00:00:00:00:00:00:00:93:70
+[11:27:23][I][ON_READ:246]: This is a lambda. address=0x500c, value=0
+[11:27:23][I][ON_READ:255]: This is a lambda. address=0x500d, value=0
+[11:27:23][I][ON_READ:264]: This is a lambda. address=0x500e, value=0
+[11:27:23][I][ON_READ:273]: This is a lambda. address=0x500f, value=0
+[11:27:23][I][ON_READ:282]: This is a lambda. address=0x5010, value=0
+[11:27:23][I][ON_READ:291]: This is a lambda. address=0x5011, value=0
+[11:27:23][D][uart_debug:114]: <<< 01:03:50:0C:00:06:14:CB
+[11:27:23][D][uart_debug:114]: >>> 01:03:0C:00:00:00:00:00:00:00:00:00:00:00:00:93:70
+[11:27:25][I][ON_READ:246]: This is a lambda. address=0x500c, value=0
+[11:27:25][I][ON_READ:255]: This is a lambda. address=0x500d, value=0
+[11:27:25][I][ON_READ:264]: This is a lambda. address=0x500e, value=0
+[11:27:25][I][ON_READ:273]: This is a lambda. address=0x500f, value=0
+[11:27:25][I][ON_READ:282]: This is a lambda. address=0x5010, value=0
+[11:27:25][I][ON_READ:291]: This is a lambda. address=0x5011, value=0
+[11:27:25][D][uart_debug:114]: <<< 01:03:50:0C:00:06:14:CB
+[11:27:25][D][uart_debug:114]: >>> 01:03:0C:00:00:00:00:00:00:00:00:00:00:00:00:93:70
+[11:27:27][I][ON_READ:246]: This is a lambda. address=0x500c, value=0
+[11:27:27][I][ON_READ:255]: This is a lambda. address=0x500d, value=0
+[11:27:27][I][ON_READ:264]: This is a lambda. address=0x500e, value=0
+[11:27:27][I][ON_READ:273]: This is a lambda. address=0x500f, value=0
+[11:27:27][I][ON_READ:282]: This is a lambda. address=0x5010, value=0
+[11:27:27][I][ON_READ:291]: This is a lambda. address=0x5011, value=0
+[11:27:27][D][uart_debug:114]: <<< 01:03:50:0C:00:06:14:CB
+[11:27:27][D][uart_debug:114]: >>> 01:03:0C:00:00:00:00:00:00:00:00:00:00:00:00:93:70
+[11:27:29][I][ON_READ:246]: This is a lambda. address=0x500c, value=0
+[11:27:29][I][ON_READ:255]: This is a lambda. address=0x500d, value=0
+[11:27:29][I][ON_READ:264]: This is a lambda. address=0x500e, value=0
+[11:27:29][I][ON_READ:273]: This is a lambda. address=0x500f, value=0
+[11:27:29][I][ON_READ:282]: This is a lambda. address=0x5010, value=0
+[11:27:29][I][ON_READ:291]: This is a lambda. address=0x5011, value=0
+[11:27:29][D][uart_debug:114]: <<< 01:03:50:0C:00:06:14:CB
+[11:27:29][D][uart_debug:114]: >>> 01:03:0C:00:00:00:00:00:00:00:00:00:00:00:00:93:70
+[11:27:31][I][ON_READ:246]: This is a lambda. address=0x500c, value=0
+[11:27:31][I][ON_READ:255]: This is a lambda. address=0x500d, value=0
+[11:27:31][I][ON_READ:264]: This is a lambda. address=0x500e, value=0
+[11:27:31][I][ON_READ:273]: This is a lambda. address=0x500f, value=0
+[11:27:31][I][ON_READ:282]: This is a lambda. address=0x5010, value=0
+[11:27:31][I][ON_READ:291]: This is a lambda. address=0x5011, value=0
+[11:27:31][D][uart_debug:114]: <<< 01:03:50:0C:00:06:14:CB
+[11:27:31][D][uart_debug:114]: >>> 01:03:0C:00:00:00:00:00:00:00:00:00:00:00:00:93:70
+[11:27:33][I][ON_READ:246]: This is a lambda. address=0x500c, value=0
+[11:27:33][I][ON_READ:255]: This is a lambda. address=0x500d, value=0
+[11:27:33][I][ON_READ:264]: This is a lambda. address=0x500e, value=0
+[11:27:33][I][ON_READ:273]: This is a lambda. address=0x500f, value=0
+[11:27:33][I][ON_READ:282]: This is a lambda. address=0x5010, value=0
+[11:27:33][I][ON_READ:291]: This is a lambda. address=0x5011, value=0
+[11:27:33][D][uart_debug:114]: <<< 01:03:50:0C:00:06:14:CB
+[11:27:34][D][uart_debug:114]: >>> 01:03:0C:00:00:00:00:00:00:00:00:00:00:00:00:93:70
