@@ -6,7 +6,7 @@ This project emulates a Xemex CSMB which is used by the Shell Recharge 3.0 Advan
 
 ## Working
 
-ESPhome acting as a Xemex CSMB by simulating a Modbus RTU Slave/Client/Server that can be polled by a master (e.g. a EV Wallbox like Shell Recharge Advanced 3.0) and delivers IREGs and HREGs which can be controlled arbitratily, I'm planning to use the values from my Shelly EM, however I've included a return value examples that allows you to set the values directly from HomeAssistant for anyone using that.
+ESPhome acting as a Xemex CSMB by simulating a Modbus RTU Slave/Client/Server that can be polled by a master (e.g. a EV Wallbox like Shell Recharge Advanced 3.0) and delivers IREGs and HREGs which can be controlled arbitratily. Currently I'm including an automation that uses values from my Shelly 3EM. It's based on the work from [NMOptimization](https://community.home-assistant.io/u/NMOptimization). Originally posted on a thread called [My New Motion integration EV Charging from Shell newmotion](https://community.home-assistant.io/t/my-new-motion-integration-ev-charging-from-shell-newmotion/369593/153)
 
 The Xemex CSMB is used to measure the current on up to 3 phases in the home. Based on the actual power consumption, the Shell Recharge 3.0 can decrease or increase the power consumed by the connected car.
 
@@ -145,15 +145,12 @@ modbus_server:
           ESP_LOGI("ON_READ", "This is a lambda. address=%d, value=%d", address, value);
           return value; // you can return the stored value or something else.
 
-
-
-
 #    input_registers:
-# 
+#
 
-      # However, most inverters are likely to only request (or only use) certain values.
-      # E.g. My Growatt TLX3600 modbus master connected to mobus port B, requests first 14 regs
-      # initially (01 04 00 00 00 0E 71 CE)
+# However, most inverters are likely to only request (or only use) certain values.
+# E.g. My Growatt TLX3600 modbus master connected to mobus port B, requests first 14 regs
+# initially (01 04 00 00 00 0E 71 CE)
 
 #      - start_address: 00
 #        default: 240 # Line to neutral Volts
@@ -168,4 +165,3 @@ modbus_server:
 Link to [amazon.com.be](https://www.amazon.com.be/-/nl/Fasizi-RS485-adapter-seri%C3%ABle-aansluiting/dp/B09Z2GTMJ8/)
 
 ![RS485-module](https://raw.githubusercontent.com/thomase1234/esphome-fake-xemex-csmb/thomas-dev/pictures/RS485_Adapter.jpg)
-
