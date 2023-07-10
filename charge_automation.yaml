@@ -183,10 +183,10 @@ action:
             data:
               value: >-
                 {% set newvalue = states('sensor.shell3em_main_power') | int * -1 + states('sensor.shelly3em_laadpaal_power') | int %}
-                {% if newvalue < states('input_number.shellrecharge_min_setpoint_power') -%}
-                {{ states('input_number.shellrecharge_min_setpoint_power') }}
-                {% elif newvalue > states('input_number.shellrecharge_max_setpoint_power') -%}
-                {{ states('input_number.shellrecharge_max_setpoint_power') }}
+                {% if newvalue < states('input_number.shellrecharge_min_setpoint_power') | int -%}
+                {{ states('input_number.shellrecharge_min_setpoint_power') | int }}
+                {% elif newvalue > states('input_number.shellrecharge_max_setpoint_power') | int -%}
+                {{ states('input_number.shellrecharge_max_setpoint_power') | int }}
                 {%- else -%}
                 {{ newvalue }}
                 {%- endif %}
@@ -201,10 +201,10 @@ action:
             data:
               value: >-
                 {% set newvalue = states('sensor.shell3em_main_power') | int * -1 + states('sensor.shelly3em_laadpaal_power') | int %}
-                {% if newvalue < states('input_number.shellrecharge_min_setpoint_power') -%}
-                {{ states('input_number.shellrecharge_min_setpoint_power') }}
-                {% elif newvalue > states('input_number.shellrecharge_max_setpoint_power') -%}
-                {{ states('input_number.shellrecharge_max_setpoint_power') }}
+                {% if newvalue < states('input_number.shellrecharge_min_setpoint_power') | int -%}
+                {{ states('input_number.shellrecharge_min_setpoint_power') | int }}
+                {% elif newvalue > states('input_number.shellrecharge_max_setpoint_power') | int -%}
+                {{ states('input_number.shellrecharge_max_setpoint_power') | int }}
                 {%- else -%}
                 {{ newvalue }}
                 {%- endif %}
@@ -219,10 +219,10 @@ action:
             data:
               value: >-
                 {% set newvalue = states('sensor.shell3em_main_power') | int * -1 + states('sensor.shelly3em_laadpaal_power') | int + 500 %}
-                {% if newvalue < states('input_number.shellrecharge_min_setpoint_power') -%}
-                {{ states('input_number.shellrecharge_min_setpoint_power') }}
-                {% elif newvalue > states('input_number.shellrecharge_max_setpoint_power') -%}
-                {{ states('input_number.shellrecharge_max_setpoint_power') }}
+                {% if newvalue < states('input_number.shellrecharge_min_setpoint_power') | int -%}
+                {{ states('input_number.shellrecharge_min_setpoint_power') | int }}
+                {% elif newvalue > states('input_number.shellrecharge_max_setpoint_power') | int -%}
+                {{ states('input_number.shellrecharge_max_setpoint_power') | int }}
                 {%- else -%}
                 {{ newvalue }}
                 {%- endif %}
@@ -237,10 +237,10 @@ action:
             data:
               value: >-
                 {% set newvalue = states('sensor.sma_ac_power') | int %}
-                {% if newvalue < states('input_number.shellrecharge_min_setpoint_power') -%}
-                {{ states('input_number.shellrecharge_min_setpoint_power') }}
-                {% elif newvalue > states('input_number.shellrecharge_max_setpoint_power') -%}
-                {{ states('input_number.shellrecharge_max_setpoint_power') }}
+                {% if newvalue < states('input_number.shellrecharge_min_setpoint_power') | int -%}
+                {{ states('input_number.shellrecharge_min_setpoint_power') | int }}
+                {% elif newvalue > states('input_number.shellrecharge_max_setpoint_power') | int -%}
+                {{ states('input_number.shellrecharge_max_setpoint_power') | int }}
                 {%- else -%}
                 {{ newvalue }}
                 {%- endif %}
