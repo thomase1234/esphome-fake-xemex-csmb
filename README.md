@@ -30,137 +30,19 @@ https://www.modbustools.com/modbus.html
 
 ## Next steps
 
-Connect it to an inverter, enable export control in the inverter menu, and monitor the requests. I've just moved house and my inverter is in a box, so id anyone wants to try this and give me some feedback I would be greatful.
+1. Connect a
 
-```yaml
-esphome:
-  name: modbus-server-xemex
-  friendly_name: modbus-server-xemex
+Connect the ESPHome device to the A and B wires that go to the wallbox and starting feeding it with data.
 
-esp32:
-  board: nodemcu-32s
-  #https://www.az-delivery.de/en/products/esp32-developmentboard
+## Hardware
 
-  framework:
-    type: arduino
+### The ESP32 Board I used
 
-## start common.yaml
+Link to product page on [Azdelivery.de](https://www.az-delivery.de/en/collections/alle-produkte/products/esp32-developmentboard)
 
-logger:
+![ESP32 NODEMCU](/pictures/esp32-nodemcu-module-wlan-wifi-development-board-mit-cp2102-nachfolgermodell-zum-esp8266-kompatibel-mit-arduino-872375_400x.webp)
 
-api:
-  encryption:
-    key: !secret api_encryption_key
-
-ota:
-  password: !secret ota_password
-
-wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
-  #fast_connect: on
-  domain: !secret domain
-
-  ap:
-    ssid: ${device_name} AP
-    password: !secret hotspot_pass
-
-captive_portal:
-
-  # Enable Web server
-web_server:
-  port: 80
-
-text_sensor:
-  - platform: wifi_info
-    ip_address:
-      name: "${device_name} - IP Address"
-    ssid:
-      name: "${device_name} - Wi-Fi SSID"
-    bssid:
-      name: "${device_name} - Wi-Fi BSSID"
-  - platform: version
-    name: "${device_name} - ESPHome Version"
-    hide_timestamp: true
-
-# see: https://esphome.io/components/time.html
-time:
-  - platform: homeassistant
-#    id: homeassistant_time
-
-## end common.yaml
-
-external_components:
-  - source: github://thomase1234/esphome-fake-xemex-csmb@thomas-dev
-    refresh: 60s
-    components:
-      - modbus_server
-
-uart:
-  - id: intmodbus
-    tx_pin: 17 # DI WHITE wire
-    rx_pin: 16 # RO BLUE  wire
-    baud_rate: 9600
-    stop_bits: 1
-    data_bits: 8
-    parity: NONE
-    debug:
-      direction: BOTH
-
-modbus_server:
-  - id: modbuserver
-    uart_id: intmodbus
-    address: 1 # slave address
-    #  - I used this module which reqired pins below http://domoticx.com/wp-content/uploads/2018/01/RS485-module-shield.jpg
-    re_pin: GPIO19 # optional
-    de_pin: GPIO18 # optional
-
-    holding_registers:
-      # I've implemented some of the regs found in this PDF:
-      # https://xemex.eu/wp-content/uploads/2021/07/User-manual-CSMB-1.0.pdf
-      - start_address: 0x4000 # starting register range for Serial Number
-        default: 0xabcd # default value for all those registers
-        number: 2 # number of registers in the range
-        on_read: | # called whenever a register in the range is read
-          // 'address' contains the requested register address
-          // 'value' contains the stored register value
-          ESP_LOGI("ON_READ", "This is a lambda. address=%d, value=%d", address, value);
-          return value; // you can return the stored value or something else.
-
-      - start_address: 0x4002 # starting register range for Device Code
-        default: 0x00 # default value for all those registers (VERIFY)
-        number: 1 # number of registers in the range
-        on_read: | # called whenever a register in the range is read
-          // 'address' contains the requested register address
-          // 'value' contains the stored register value
-          ESP_LOGI("ON_READ", "This is a lambda. address=%d, value=%d", address, value);
-          return value; // you can return the stored value or something else.
-
-      - start_address: 0x4003 # starting register range for Device Address
-        default: 0x1 # default value for all those registers
-        number: 1 # number of registers in the range
-        on_read: | # called whenever a register in the range is read
-          // 'address' contains the requested register address
-          // 'value' contains the stored register value
-          ESP_LOGI("ON_READ", "This is a lambda. address=%d, value=%d", address, value);
-          return value; // you can return the stored value or something else.
-
-#    input_registers:
-#
-
-# However, most inverters are likely to only request (or only use) certain values.
-# E.g. My Growatt TLX3600 modbus master connected to mobus port B, requests first 14 regs
-# initially (01 04 00 00 00 0E 71 CE)
-
-#      - start_address: 00
-#        default: 240 # Line to neutral Volts
-#        number: 1
-#        on_read:
-#          ESP_LOGI("ON_READ", "This is a lambda. address=%d, value=%d", address, value);
-#          return value; // you can return the stored value or something else.
-```
-
-## The RS485 module I used
+### The RS485 module I used
 
 Link to [amazon.com.be](https://www.amazon.com.be/-/nl/Fasizi-RS485-adapter-seri%C3%ABle-aansluiting/dp/B09Z2GTMJ8/)
 
