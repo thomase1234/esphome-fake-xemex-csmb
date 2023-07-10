@@ -43,7 +43,8 @@ https://www.modbustools.com/modbus.html
 - Immediately after booting, the Shell Recharge 3.0 Wallbox first requests the Device Code register (0x4002). It expects '20802' as a response. If not, it'll continue retrying.
 - The Shell Recharge 3 Wallbox requests the 3 CT registers every 2 seconds.
 - This table shows how much Watts the connected car would start consuming after setting the CT3 register to a certain A. F.e. When I set CT3 to 18 ( Amps ), the car started consuming 4550 Watt.
-  ![Amd to Consumption](/pictures/amp_to_consumption.png)
+
+![Amd to Consumption](/pictures/amp_to_consumption.png)
 
 ## Unexplicable behaviour
 
