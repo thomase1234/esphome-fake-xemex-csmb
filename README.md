@@ -1,8 +1,6 @@
-** This is a work in progress **
-
 ## Goal
 
-This project emulates a Xemex CSMB which is used by the Shell Recharge 3.0 Advanced wall Charger
+This project tries to set the charge speed of a Shell Recharge 3.0 Advanced wall Chargerby emulating a Xemex CSMB.
 
 ## Working
 
@@ -30,9 +28,28 @@ https://www.modbustools.com/modbus.html
 
 ## Next steps
 
-1. Connect a
+1. Connect ESP32 dev board to RS485 module.
+2. Connect RS485 A and B connectors to the A and B wire that goes to the Shell Recharge 3.0 Wallbox.
+3. Build and flash the firmware based on the [sample ESPHome config](/esphome-xemex-fake-modbus-server.yaml).
+4. Add new device in HomeAssistant.
+5. Now you should be able to set the ctXcurrent numbers. When you set them using HomeAssistant, the values are also reported to your Wallbox.
+6. Setup an automation to configure the charge speed. Here you can find a [charge automation](/charge_automation.yaml)
 
-Connect the ESPHome device to the A and B wires that go to the wallbox and starting feeding it with data.
+## Interesting info
+
+- My house has a single phase - 40 A connection to the power grid. The house also has a photovoltaic installation that delivers up to 5kW peak. My automation tries to optime power consumption from the sun.
+- [In a sister project](https://github.com/thomase1234/esphome-modbus-client-xemex-csmb), I've pulled all data from my Xemex CSMB.
+- The real CSMB has 1 CT connected to CT1. Using my custom modbus client, I could see that the register for CT1 contained the actual current. The other to registers ( CT2 and CT3 ) had a non-changing value, which I took over in the ESPHome config.
+- Immediately after booting, the Shell Recharge 3.0 Wallbox first requests the Device Code register (0x4002). It expects '20802' as a response. If not, it'll continue retrying.
+- The Shell Recharge 3 Wallbox requests the 3 CT registers every 2 seconds.
+- This table shows how much Watts the connected car would start consuming after setting the CT3 register to a certain A. F.e. When I set CT3 to 18 ( Amps ), the car started consuming 4550 Watt.
+  ![Amd to Consumption](/pictures/amp_to_consumption.png)
+
+## Unexplicable behaviour
+
+- I could influence the charge speed by playing with the Current in CT3.
+- I couldn't influence the Wallbox by playing around with CT1. This I cannot explain. The real Xemex CSMB only used CT1 as far as my Modbus client showed.
+  That's strange, as my installation is supposed to use the measurements from CT1.
 
 ## Hardware
 
