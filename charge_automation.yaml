@@ -10,7 +10,7 @@ action:
           - condition: template
             value_template: >-
               {{states('input_number.shellrecharge_manual_setpoint_power') |int 
-              - (states('sensor.shelly3em_laadpaal_power') |int) > 75}}
+              - (states('sensor.shelly3em_laadpaal_power') |int) > 50}}
           - condition: template
             value_template: >-
               {{states('input_number.shellrecharge_manual_setpoint_power') |int 
@@ -90,7 +90,7 @@ action:
           - condition: template
             value_template: >-
               {{states('input_number.shellrecharge_manual_setpoint_power') |int 
-              - (states('sensor.shelly3em_laadpaal_power') |int) < -75}}
+              - (states('sensor.shelly3em_laadpaal_power') |int) < -50}}
           - condition: template
             value_template: >-
               {{states('input_number.shellrecharge_manual_setpoint_power') |int 
