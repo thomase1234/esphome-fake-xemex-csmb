@@ -64,7 +64,7 @@ time:
 
 
 external_components:
-  - source: github://thomase1234/esphome-fake-xemex-csmb@thomas-dev
+  - source: github://thomase1234/esphome-fake-xemex-csmb@master
     refresh: 60s
     components:
       - modbus_server
