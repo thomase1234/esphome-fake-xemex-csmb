@@ -64,4 +64,4 @@ Link to product page on [Azdelivery.de](https://www.az-delivery.de/en/collection
 
 Link to [amazon.com.be](https://www.amazon.com.be/-/nl/Fasizi-RS485-adapter-seri%C3%ABle-aansluiting/dp/B09Z2GTMJ8/)
 
-![RS485-module](https://raw.githubusercontent.com/thomase1234/esphome-fake-xemex-csmb/thomas-dev/pictures/RS485_Adapter.jpg)
+![RS485-module](/pictures/RS485_Adapter.jpg)
