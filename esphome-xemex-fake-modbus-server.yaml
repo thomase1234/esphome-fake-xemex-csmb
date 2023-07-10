@@ -1,0 +1,366 @@
+substitutions:
+  device_name: "modbus-server-xemex"
+  device_comment: "Modbus Client that can simulate modbus of Xemex CSMB"
+
+esphome:
+  name: ${device_name}
+  friendly_name: ${device_name}
+  comment: $device_comment
+  name_add_mac_suffix: false
+  project:
+    name: "MODBUS.Server-Xemex"
+    version: "1"
+
+
+esp32:
+  board: nodemcu-32s
+  #https://www.az-delivery.de/en/products/esp32-developmentboard
+
+  framework:
+    type: arduino
+
+logger:
+
+api:
+  encryption:
+    key: !secret api_encryption_key
+
+ota:
+  password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  domain : !secret domain
+
+  ap:
+    ssid: ${device_name} AP
+    password: !secret hotspot_pass
+
+captive_portal:
+
+  # Enable Web server
+web_server:
+  port: 80
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: "${device_name} - IP Address"
+    ssid:
+      name: "${device_name} - Wi-Fi SSID"
+    bssid:
+      name: "${device_name} - Wi-Fi BSSID"
+  - platform: version
+    name: "${device_name} - ESPHome Version"
+    hide_timestamp: true
+
+# see: https://esphome.io/components/time.html
+time:
+  - platform: homeassistant
+#    id: homeassistant_time
+
+## end common.yaml
+
+
+external_components:
+  - source: github://thomase1234/esphome-fake-xemex-csmb@thomas-dev
+    refresh: 60s
+    components:
+      - modbus_server
+
+uart:
+  - id: intmodbus
+    # https://cdn.shopify.com/s/files/1/1509/1638/files/ESP-32_NodeMCU_Developmentboard_Pinout.pdf
+    tx_pin: 18 # DI PURPLE wire
+    rx_pin: 19 # RO BLUE  wire
+    baud_rate: 9600   # default for Xemex CMSB
+    stop_bits: 1 #default to 8E1
+    data_bits: 8 #default to 8E1
+    parity: EVEN #default to 8E1
+    debug:
+      direction: BOTH
+
+
+modbus_server:
+  - id: modbusserver
+    uart_id: intmodbus
+    address: 1 # slave address
+    #  - I used this module which reqired pins below http://domoticx.com/wp-content/uploads/2018/01/RS485-module-shield.jpg
+#    re_pin: GPIO19 # optional
+#    de_pin: GPIO18 # optional
+
+    holding_registers:
+      # I've implemented some of the regs found in this PDF:
+      # https://xemex.eu/wp-content/uploads/2021/07/User-manual-CSMB-1.0.pdf
+      - start_address: 0x4000 # register for Serial Number
+        default: 0x1 # This is what my real Xemex CSMB returned
+        number: 2 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value
+          ESP_LOGI("ON_READ", "This is a lambda. address=0x%04x, value=%d", address, value);
+          return value; // you can return the stored value or something else.
+
+      - start_address: 0x4002 # register for Device Code
+        default: 20802 # default value for this register
+        number: 1 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value
+          ESP_LOGI("ON_READ", "This is a lambda. address=0x%04x, value=%d", address, value);
+          return value; // you can return the stored value or something else.
+
+      - start_address: 0x4003 # register for Device Address
+        default: 0x1 # default value for this register
+        number: 1 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value
+          ESP_LOGI("ON_READ", "This is a lambda. address=0x%04x, value=%d", address, value);
+          return value; // you can return the stored value or something else.
+
+      - start_address: 0x4004 # register for RS485 Baudrate Low
+        default: 9600 # default value for this register
+        number: 1 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value
+          ESP_LOGI("ON_READ", "This is a lambda. address=0x%04x, value=%d", address, value);
+          return value; // you can return the stored value or something else.
+
+      - start_address: 0x4005 # starting register for Protocol Version. This is the first register of a FLOAT
+        default: 0x3f80 # default value for this register
+        number: 1 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value
+          ESP_LOGI("ON_READ", "This is a lambda. address=0x%04x, value=%d", address, value);
+          return value; // you can return the stored value or something else.
+
+      - start_address: 0x4006 # ending register for Protocol Version. This is the second register of a FLOAT
+        default: 0x0000 # default value for this register
+        number: 1 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value
+          ESP_LOGI("ON_READ", "This is a lambda. address=0x%04x, value=%d", address, value);
+          return value; // you can return the stored value or something else.
+
+      - start_address: 0x4007 # starting register for Software Version. This is the first register of a FLOAT
+        default: 0x4000 # default value for this register
+        number: 1 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value
+          ESP_LOGI("ON_READ", "This is a lambda. address=0x%04x, value=%d", address, value);
+          return value; // you can return the stored value or something else.
+
+      - start_address: 0x4008 # ending register for Software Version. This is the second register of a FLOAT
+        default: 0x0000 # default value for this register
+        number: 1 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value
+          ESP_LOGI("ON_READ", "This is a lambda. address=0x%04x, value=%d", address, value);
+          return value; // you can return the stored value or something else.
+
+      - start_address: 0x4009 # starting register for Hardware Version. This is the first register of a FLOAT
+        default: 0x0000 # default value for this register
+        number: 1 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value
+          ESP_LOGI("ON_READ", "This is a lambda. address=0x%04x, value=%d", address, value);
+          return value; // you can return the stored value or something else.
+
+      - start_address: 0x400A # ending register for Hardware Version. This is the second register of a FLOAT
+        default: 0x0000 # default value for this register
+        number: 1 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value
+          ESP_LOGI("ON_READ", "This is a lambda. address=0x%04x, value=%d", address, value);
+          return value; // you can return the stored value or something else.
+
+      - start_address: 0x400B # register for Meter Amps. 
+        default: 80 # default value for this register
+        number: 1 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value
+          ESP_LOGI("ON_READ", "This is a lambda. address=0x%04x, value=%d", address, value);
+          return value; // you can return the stored value or something else.
+
+      - start_address: 0x400C # register for CT Ratio. 
+        default: 2000 # default value for this register
+        number: 1 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value
+          ESP_LOGI("ON_READ", "This is a lambda. address=0x%04x, value=%d", address, value);
+          return value; // you can return the stored value or something else.
+
+      - start_address: 0x400D # register for RS485 Line Settings. 
+        default: 36 # default value for this register
+        number: 1 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value
+          ESP_LOGI("ON_READ", "This is a lambda. address=0x%04x, value=%d", address, value);
+          return value; // you can return the stored value or something else.
+
+      - start_address: 0x400E # register for RS485 Line Termination. 
+        default: 1 # default value for this register
+        number: 1 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value
+          ESP_LOGI("ON_READ", "This is a lambda. address=0x%04x, value=%d", address, value);
+          return value; // you can return the stored value or something else.
+
+      - start_address: 0x400F # register for RS485 Baudrate High. 
+        default: 0 # default value for this register
+        number: 1 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value
+          ESP_LOGI("ON_READ", "This is a lambda. address=0x%04x, value=%d", address, value);
+          return value; // you can return the stored value or something else.
+
+      - start_address: 0x500C # starting register for RMS Current CT1. This is the first register of a FLOAT
+        default: 0x0000 # default value for this register
+        number: 1 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value
+          ESP_LOGI("ON_READ", "CT1. address=0x%04x, value=0x%04x", address, value);
+          return value; // you can return the stored value or something else.
+
+      - start_address: 0x500D # ending register for RMS Current CT1. This is the second register of a FLOAT
+        default: 0x0000 # default value for this register
+        number: 1 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value
+          ESP_LOGI("ON_READ", "CT1. address=0x%04x, value=0x%04x", address, value);
+          return value; // you can return the stored value or something else.
+
+      - start_address: 0x500E # starting register for RMS Current CT2. This is the first register of a FLOAT
+        default: 0x3E73 # default value for this register 3E:73:43:33
+        number: 1 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value
+          ESP_LOGI("ON_READ", "CT2. address=0x%04x, value=0x%04x", address, value);
+          return value; // you can return the stored value or something else.
+
+      - start_address: 0x500F # ending register for RMS Current CT2. This is the second register of a FLOAT
+        default: 0x4333 # default value for this register
+        number: 1 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value
+          ESP_LOGI("ON_READ", "CT2. address=0x%04x, value=0x%04x", address, value);
+          return value; // you can return the stored value or something else.
+
+      - start_address: 0x5010 # starting register for RMS Current CT3. This is the first register of a FLOAT
+        default: 0x3E09 # default value for this register 3E:09:39:9A
+        number: 1 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value
+          ESP_LOGI("ON_READ", "CT3. address=0x%04x, value=0x%04x", address, value);
+          return value; // you can return the stored value or something else.
+
+      - start_address: 0x5011 # ending register for RMS Current CT3. This is the second register of a FLOAT
+        default: 0x399A # default value for this register
+        number: 1 # number of registers in the range
+        on_read: | # called whenever a register in the range is read
+          // 'address' contains the requested register address
+          // 'value' contains the stored register value
+          ESP_LOGI("ON_READ", "CT3. address=0x%04x, value=0x%04x", address, value);
+          return value; // you can return the stored value or something else.
+
+number:
+  - platform: template
+    name: ct1current
+    id: ct1current
+    optimistic: False
+    update_interval: 2s
+    min_value: 0
+    max_value: 40
+    step: 0.1
+    unit_of_measurement: A
+    set_action: 
+      then: 
+        - lambda: |-
+            ESP_LOGD("modbus-server-xemex", "Current set to: %f", x);
+            // convert from float to 2 uint16_t. 
+            union 
+            {
+            uint16_t x_int[2];
+            float x_f;
+            } u;
+            u.x_f = x;
+            // setting modbusserver registers
+            // use https://www.h-schmidt.net/FloatConverter/IEEE754.html to doublecheck conversions
+            modbusserver->write_holding_register(0x500C,u.x_int[1]);
+            modbusserver->write_holding_register(0x500D,u.x_int[0]);
+            ESP_LOGD("modbus-server-xemex", "Registers for CT1 set to: 0x%04x and 0x%04x", u.x_int[1], u.x_int[0]);
+            // and finally set the value of this number template
+            id(ct1current).publish_state(x);
+  - platform: template
+    name: ct2current
+    id: ct2current
+    optimistic: False
+    update_interval: 2s
+    min_value: 0
+    max_value: 40
+    step: 0.1
+    unit_of_measurement: A
+    set_action: 
+      then: 
+        - lambda: |-
+            ESP_LOGD("modbus-server-xemex", "Current set to: %f", x);
+            // convert from float to 2 uint16_t. 
+            union 
+            {
+            uint16_t x_int[2];
+            float x_f;
+            } u;
+            u.x_f = x;
+            // setting modbusserver registers
+            // use https://www.h-schmidt.net/FloatConverter/IEEE754.html to doublecheck conversions
+            modbusserver->write_holding_register(0x500E,u.x_int[1]);
+            modbusserver->write_holding_register(0x500F,u.x_int[0]);
+            ESP_LOGD("modbus-server-xemex", "Registers for CT2 set to: 0x%04x and 0x%04x", u.x_int[1], u.x_int[0]);
+            // and finally set the value of this number template
+            id(ct2current).publish_state(x);
+  - platform: template
+    name: ct3current
+    id: ct3current
+    optimistic: False
+    update_interval: 2s
+    min_value: 0
+    max_value: 40
+    step: 0.1
+    unit_of_measurement: A
+    set_action: 
+      then: 
+        - lambda: |-
+            ESP_LOGD("modbus-server-xemex", "Current set to: %f", x);
+            // convert from float to 2 uint16_t. 
+            union 
+            {
+            uint16_t x_int[2];
+            float x_f;
+            } u;
+            u.x_f = x;
+            // setting modbusserver registers
+            // use https://www.h-schmidt.net/FloatConverter/IEEE754.html to doublecheck conversions
+            modbusserver->write_holding_register(0x5010,u.x_int[1]);
+            modbusserver->write_holding_register(0x5011,u.x_int[0]);
+            ESP_LOGD("modbus-server-xemex", "Registers for CT3 set to: 0x%04x and 0x%04x", u.x_int[1], u.x_int[0]);
+            // and finally set the value of this number template
+            id(ct3current).publish_state(x);

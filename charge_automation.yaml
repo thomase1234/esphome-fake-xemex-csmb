@@ -1,0 +1,266 @@
+alias: ShellRecharge Regulation
+description: ""
+trigger:
+  - platform: time_pattern
+    seconds: /4
+    enabled: true
+action:
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: >-
+              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
+              - (states('sensor.shelly3em_laadpaal_power') |int) > 50}}
+          - condition: template
+            value_template: >-
+              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
+              - (states('sensor.shelly3em_laadpaal_power') |int) <= 150}}
+        sequence:
+          - service: number.set_value
+            data:
+              value: >-
+                {% set newvalue = states('number.modbus_server_xemex_ct3current') | float(1) - 0.1 %}
+                {% if newvalue  >= 1 and newvalue <= 40 -%}  
+                {{ newvalue }}
+                {%- else -%}
+                {{ states('number.modbus_server_xemex_ct3current') | float(1) }}
+                {%- endif %}
+            target:
+              entity_id: number.modbus_server_xemex_ct3current
+      - conditions:
+          - condition: template
+            value_template: >-
+              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
+              - (states('sensor.shelly3em_laadpaal_power') |int) > 150}}
+          - condition: template
+            value_template: >-
+              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
+              - (states('sensor.shelly3em_laadpaal_power') |int) <= 500}}
+        sequence:
+          - service: number.set_value
+            data:
+              value: >-
+                {% set newvalue = states('number.modbus_server_xemex_ct3current') | float(1) - 0.5 %}
+                {% if newvalue  >= 1 and newvalue <= 40 -%} 
+                {{ newvalue }}
+                {%- else -%}
+                {{ states('number.modbus_server_xemex_ct3current') | float(1) }}
+                {%- endif %}
+            target:
+              entity_id: number.modbus_server_xemex_ct3current
+      - conditions:
+          - condition: template
+            value_template: >-
+              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
+              - (states('sensor.shelly3em_laadpaal_power') |int) > 500}}
+          - condition: template
+            value_template: >-
+              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
+              - (states('sensor.shelly3em_laadpaal_power') |int) <= 1500}}
+        sequence:
+          - service: number.set_value
+            data:
+              value: >-
+                {% set newvalue = states('number.modbus_server_xemex_ct3current') | float(1) - 1 %}
+                {% if newvalue  >= 1 and newvalue <= 40 -%}
+                {{ newvalue }}
+                {%- else -%}
+                {{ states('number.modbus_server_xemex_ct3current') | float(1) }}
+                {%- endif %}
+            target:
+              entity_id: number.modbus_server_xemex_ct3current
+      - conditions:
+          - condition: template
+            value_template: >-
+              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
+              - (states('sensor.shelly3em_laadpaal_power') |int) > 1500}}
+        sequence:
+          - service: number.set_value
+            data:
+              value: >-
+                {% set newvalue = states('number.modbus_server_xemex_ct3current') | float(1) - 2 %}
+                {% if newvalue  >= 1 and newvalue <= 40 -%}
+                {{ newvalue }}
+                {%- else -%}
+                {{ states('number.modbus_server_xemex_ct3current') | float(1) }}
+                {%- endif %}
+            target:
+              entity_id: number.modbus_server_xemex_ct3current
+      - conditions:
+          - condition: template
+            value_template: >-
+              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
+              - (states('sensor.shelly3em_laadpaal_power') |int) < -50}}
+          - condition: template
+            value_template: >-
+              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
+              - (states('sensor.shelly3em_laadpaal_power') |int) >= -150}}
+        sequence:
+          - service: number.set_value
+            data:
+              value: >-
+                {% set newvalue = states('number.modbus_server_xemex_ct3current') | float(1) + 0.1 %}
+                {% if newvalue  >= 1 and newvalue <= 40 -%}
+                {{ newvalue }}
+                {%- else -%}
+                {{ states('number.modbus_server_xemex_ct3current') | float(1) }}
+                {%- endif %}
+            target:
+              entity_id: number.modbus_server_xemex_ct3current
+      - conditions:
+          - condition: template
+            value_template: >-
+              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
+              - (states('sensor.shelly3em_laadpaal_power') |int) < -150}}
+          - condition: template
+            value_template: >-
+              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
+              - (states('sensor.shelly3em_laadpaal_power') |int) >= -500}}
+        sequence:
+          - service: number.set_value
+            data:
+              value: >-
+                {% set newvalue = states('number.modbus_server_xemex_ct3current') | float(1) + 0.5 %}
+                {% if newvalue  >= 1 and newvalue <= 40 -%}
+                {{ newvalue }}
+                {%- else -%}
+                {{ states('number.modbus_server_xemex_ct3current') | float(1) }}
+                {%- endif %}
+            target:
+              entity_id: number.modbus_server_xemex_ct3current
+      - conditions:
+          - condition: template
+            value_template: >-
+              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
+              - (states('sensor.shelly3em_laadpaal_power') |int) < -500}}
+          - condition: template
+            value_template: >-
+              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
+              - (states('sensor.shelly3em_laadpaal_power') |int) >= -1500}}
+        sequence:
+          - service: number.set_value
+            data:
+              value: >-
+                {% set newvalue = states('number.modbus_server_xemex_ct3current') | float(1) + 1 %}
+                {% if newvalue  >= 1 and newvalue <= 40 -%}
+                {{ newvalue }}
+                {%- else -%}
+                {{ states('number.modbus_server_xemex_ct3current') | float(1) }}
+                {%- endif %}
+            target:
+              entity_id: number.modbus_server_xemex_ct3current
+      - conditions:
+          - condition: template
+            value_template: >-
+              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
+              - (states('sensor.shelly3em_laadpaal_power') |int) < -1500}}
+        sequence:
+          - service: number.set_value
+            data:
+              value: >-
+                {% set newvalue = states('number.modbus_server_xemex_ct3current') | float(1) + 2 %}
+                {% if newvalue  >= 1 and newvalue <= 40 -%}
+                {{ newvalue }}
+                {%- else -%}
+                {{ states('number.modbus_server_xemex_ct3current') | float(1) }}
+                {%- endif %}
+            target:
+              entity_id: number.modbus_server_xemex_ct3current
+    default:
+      - service: number.set_value
+        data:
+          value: "{{ states('number.modbus_server_xemex_ct3current') | float(1) - 0 }}"
+        target:
+          entity_id: number.modbus_server_xemex_ct3current
+    enabled: true
+  - choose:
+      - conditions:
+          - condition: state
+            entity_id: input_select.charge_mode
+            state: Max Speed
+        sequence:
+          - service: input_number.set_value
+            data:
+              value: >-
+                {% set newvalue = states('sensor.shell3em_main_power') | int * -1 + states('sensor.shelly3em_laadpaal_power') | int %}
+                {% if newvalue < states('input_number.shellrecharge_min_setpoint_power') | int -%}
+                {{ states('input_number.shellrecharge_min_setpoint_power') | int }}
+                {% elif newvalue > states('input_number.shellrecharge_max_setpoint_power') | int -%}
+                {{ states('input_number.shellrecharge_max_setpoint_power') | int }}
+                {%- else -%}
+                {{ newvalue }}
+                {%- endif %}
+            target:
+              entity_id: input_number.shellrecharge_manual_setpoint_power
+      - conditions:
+          - condition: state
+            entity_id: input_select.charge_mode
+            state: Avoid Power To Grid
+        sequence:
+          - service: input_number.set_value
+            data:
+              value: >-
+                {% set newvalue = states('sensor.shell3em_main_power') | int * -1 + states('sensor.shelly3em_laadpaal_power') | int %}
+                {% if newvalue < states('input_number.shellrecharge_min_setpoint_power') | int -%}
+                {{ states('input_number.shellrecharge_min_setpoint_power') | int }}
+                {% elif newvalue > states('input_number.shellrecharge_max_setpoint_power') | int -%}
+                {{ states('input_number.shellrecharge_max_setpoint_power') | int }}
+                {%- else -%}
+                {{ newvalue }}
+                {%- endif %}
+            target:
+              entity_id: input_number.shellrecharge_manual_setpoint_power
+      - conditions:
+          - condition: state
+            entity_id: input_select.charge_mode
+            state: 500 W From Grid
+        sequence:
+          - service: input_number.set_value
+            data:
+              value: >-
+                {% set newvalue = states('sensor.shell3em_main_power') | int * -1 + states('sensor.shelly3em_laadpaal_power') | int + 500 %}
+                {% if newvalue < states('input_number.shellrecharge_min_setpoint_power') | int -%}
+                {{ states('input_number.shellrecharge_min_setpoint_power') | int }}
+                {% elif newvalue > states('input_number.shellrecharge_max_setpoint_power') | int -%}
+                {{ states('input_number.shellrecharge_max_setpoint_power') | int }}
+                {%- else -%}
+                {{ newvalue }}
+                {%- endif %}
+            target:
+              entity_id: input_number.shellrecharge_manual_setpoint_power
+      - conditions:
+          - condition: state
+            entity_id: input_select.charge_mode
+            state: Solar only
+        sequence:
+          - service: input_number.set_value
+            data:
+              value: >-
+                {% set newvalue = states('sensor.sma_ac_power') | int %}
+                {% if newvalue < states('input_number.shellrecharge_min_setpoint_power') | int -%}
+                {{ states('input_number.shellrecharge_min_setpoint_power') | int }}
+                {% elif newvalue > states('input_number.shellrecharge_max_setpoint_power') | int -%}
+                {{ states('input_number.shellrecharge_max_setpoint_power') | int }}
+                {%- else -%}
+                {{ newvalue }}
+                {%- endif %}
+            target:
+              entity_id: input_number.shellrecharge_manual_setpoint_power
+      - conditions:
+          - condition: state
+            entity_id: input_select.charge_mode
+            state: Disabled
+        sequence:
+          - service: input_number.set_value
+            data:
+              value: 0
+            target:
+              entity_id: input_number.shellrecharge_manual_setpoint_power
+    enabled: true
+    default:
+      - service: input_number.set_value
+        data:
+          value: 2345
+        target:
+          entity_id: input_number.shellrecharge_manual_setpoint_power
+mode: single
