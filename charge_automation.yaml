@@ -15,14 +15,8 @@ action:
           - service: input_number.set_value
             data:
               value: >-
-                {% set newvalue = states('sensor.shell3em_main_power') | int * -1 + states('sensor.shelly3em_laadpaal_power') | int %}
-                {% if newvalue < states('input_number.shellrecharge_min_setpoint_power') | int -%}
-                {{ states('input_number.shellrecharge_min_setpoint_power') | int }}
-                {% elif newvalue > states('input_number.shellrecharge_max_setpoint_power') | int -%}
-                {{ states('input_number.shellrecharge_max_setpoint_power') | int }}
-                {%- else -%}
-                {{ newvalue }}
-                {%- endif %}
+                {% set actualhomepoweruse = states('sensor.shell3em_main_power') | int - states('sensor.shelly3em_laadpaal_power') | int %}
+                {{ states('input_number.main_max_power') | int - actualhomepoweruse }}
             target:
               entity_id: input_number.shellrecharge_manual_setpoint_power
       - conditions:
