@@ -5,6 +5,97 @@ trigger:
     seconds: /4
     enabled: true
 action:
+
+  - choose:
+      - conditions:
+          - condition: state
+            entity_id: input_select.charge_mode
+            state: Max Speed
+        sequence:
+          - service: input_number.set_value
+            data:
+              value: >-
+                {% set newvalue = states('sensor.shell3em_main_power') | int * -1 + states('sensor.shelly3em_laadpaal_power') | int %}
+                {% if newvalue < states('input_number.shellrecharge_min_setpoint_power') | int -%}
+                {{ states('input_number.shellrecharge_min_setpoint_power') | int }}
+                {% elif newvalue > states('input_number.shellrecharge_max_setpoint_power') | int -%}
+                {{ states('input_number.shellrecharge_max_setpoint_power') | int }}
+                {%- else -%}
+                {{ newvalue }}
+                {%- endif %}
+            target:
+              entity_id: input_number.shellrecharge_manual_setpoint_power
+      - conditions:
+          - condition: state
+            entity_id: input_select.charge_mode
+            state: Avoid Power To Grid
+        sequence:
+          - service: input_number.set_value
+            data:
+              value: >-
+                {% set newvalue = states('sensor.shell3em_main_power') | int * -1 + states('sensor.shelly3em_laadpaal_power') | int %}
+                {% if newvalue < states('input_number.shellrecharge_min_setpoint_power') | int -%}
+                {{ states('input_number.shellrecharge_min_setpoint_power') | int }}
+                {% elif newvalue > states('input_number.shellrecharge_max_setpoint_power') | int -%}
+                {{ states('input_number.shellrecharge_max_setpoint_power') | int }}
+                {%- else -%}
+                {{ newvalue }}
+                {%- endif %}
+            target:
+              entity_id: input_number.shellrecharge_manual_setpoint_power
+      - conditions:
+          - condition: state
+            entity_id: input_select.charge_mode
+            state: 500 W From Grid
+        sequence:
+          - service: input_number.set_value
+            data:
+              value: >-
+                {% set newvalue = states('sensor.shell3em_main_power') | int * -1 + states('sensor.shelly3em_laadpaal_power') | int + 500 %}
+                {% if newvalue < states('input_number.shellrecharge_min_setpoint_power') | int -%}
+                {{ states('input_number.shellrecharge_min_setpoint_power') | int }}
+                {% elif newvalue > states('input_number.shellrecharge_max_setpoint_power') | int -%}
+                {{ states('input_number.shellrecharge_max_setpoint_power') | int }}
+                {%- else -%}
+                {{ newvalue }}
+                {%- endif %}
+            target:
+              entity_id: input_number.shellrecharge_manual_setpoint_power
+      - conditions:
+          - condition: state
+            entity_id: input_select.charge_mode
+            state: Solar only
+        sequence:
+          - service: input_number.set_value
+            data:
+              value: >-
+                {% set newvalue = states('sensor.sma_ac_power') | int %}
+                {% if newvalue < states('input_number.shellrecharge_min_setpoint_power') | int -%}
+                {{ states('input_number.shellrecharge_min_setpoint_power') | int }}
+                {% elif newvalue > states('input_number.shellrecharge_max_setpoint_power') | int -%}
+                {{ states('input_number.shellrecharge_max_setpoint_power') | int }}
+                {%- else -%}
+                {{ newvalue }}
+                {%- endif %}
+            target:
+              entity_id: input_number.shellrecharge_manual_setpoint_power
+      - conditions:
+          - condition: state
+            entity_id: input_select.charge_mode
+            state: Disabled
+        sequence:
+          - service: input_number.set_value
+            data:
+              value: 0
+            target:
+              entity_id: input_number.shellrecharge_manual_setpoint_power
+    enabled: true
+    default:
+      - service: input_number.set_value
+        data:
+          value: 2345
+        target:
+          entity_id: input_number.shellrecharge_manual_setpoint_power
   - choose:
       - conditions:
           - condition: template
@@ -173,94 +264,4 @@ action:
         target:
           entity_id: number.modbus_server_xemex_ct3current
     enabled: true
-  - choose:
-      - conditions:
-          - condition: state
-            entity_id: input_select.charge_mode
-            state: Max Speed
-        sequence:
-          - service: input_number.set_value
-            data:
-              value: >-
-                {% set newvalue = states('sensor.shell3em_main_power') | int * -1 + states('sensor.shelly3em_laadpaal_power') | int %}
-                {% if newvalue < states('input_number.shellrecharge_min_setpoint_power') | int -%}
-                {{ states('input_number.shellrecharge_min_setpoint_power') | int }}
-                {% elif newvalue > states('input_number.shellrecharge_max_setpoint_power') | int -%}
-                {{ states('input_number.shellrecharge_max_setpoint_power') | int }}
-                {%- else -%}
-                {{ newvalue }}
-                {%- endif %}
-            target:
-              entity_id: input_number.shellrecharge_manual_setpoint_power
-      - conditions:
-          - condition: state
-            entity_id: input_select.charge_mode
-            state: Avoid Power To Grid
-        sequence:
-          - service: input_number.set_value
-            data:
-              value: >-
-                {% set newvalue = states('sensor.shell3em_main_power') | int * -1 + states('sensor.shelly3em_laadpaal_power') | int %}
-                {% if newvalue < states('input_number.shellrecharge_min_setpoint_power') | int -%}
-                {{ states('input_number.shellrecharge_min_setpoint_power') | int }}
-                {% elif newvalue > states('input_number.shellrecharge_max_setpoint_power') | int -%}
-                {{ states('input_number.shellrecharge_max_setpoint_power') | int }}
-                {%- else -%}
-                {{ newvalue }}
-                {%- endif %}
-            target:
-              entity_id: input_number.shellrecharge_manual_setpoint_power
-      - conditions:
-          - condition: state
-            entity_id: input_select.charge_mode
-            state: 500 W From Grid
-        sequence:
-          - service: input_number.set_value
-            data:
-              value: >-
-                {% set newvalue = states('sensor.shell3em_main_power') | int * -1 + states('sensor.shelly3em_laadpaal_power') | int + 500 %}
-                {% if newvalue < states('input_number.shellrecharge_min_setpoint_power') | int -%}
-                {{ states('input_number.shellrecharge_min_setpoint_power') | int }}
-                {% elif newvalue > states('input_number.shellrecharge_max_setpoint_power') | int -%}
-                {{ states('input_number.shellrecharge_max_setpoint_power') | int }}
-                {%- else -%}
-                {{ newvalue }}
-                {%- endif %}
-            target:
-              entity_id: input_number.shellrecharge_manual_setpoint_power
-      - conditions:
-          - condition: state
-            entity_id: input_select.charge_mode
-            state: Solar only
-        sequence:
-          - service: input_number.set_value
-            data:
-              value: >-
-                {% set newvalue = states('sensor.sma_ac_power') | int %}
-                {% if newvalue < states('input_number.shellrecharge_min_setpoint_power') | int -%}
-                {{ states('input_number.shellrecharge_min_setpoint_power') | int }}
-                {% elif newvalue > states('input_number.shellrecharge_max_setpoint_power') | int -%}
-                {{ states('input_number.shellrecharge_max_setpoint_power') | int }}
-                {%- else -%}
-                {{ newvalue }}
-                {%- endif %}
-            target:
-              entity_id: input_number.shellrecharge_manual_setpoint_power
-      - conditions:
-          - condition: state
-            entity_id: input_select.charge_mode
-            state: Disabled
-        sequence:
-          - service: input_number.set_value
-            data:
-              value: 0
-            target:
-              entity_id: input_number.shellrecharge_manual_setpoint_power
-    enabled: true
-    default:
-      - service: input_number.set_value
-        data:
-          value: 2345
-        target:
-          entity_id: input_number.shellrecharge_manual_setpoint_power
 mode: single
