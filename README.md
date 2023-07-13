@@ -1,12 +1,12 @@
 ## Goal
 
-This project tries to set the charge speed of a Shell Recharge 3.0 Advanced wall Chargerby emulating a Xemex CSMB.
+This project allows you to set the charge speed of a Shell Recharge Advanced 3.0 charging point by emulating a Xemex CSMB.
 
 ## Working
 
-ESPhome acting as a Xemex CSMB by simulating a Modbus RTU Slave/Client/Server that can be polled by a master (e.g. a EV Wallbox like Shell Recharge Advanced 3.0) and delivers IREGs and HREGs which can be controlled arbitratily. Currently I'm including an automation that uses values from my Shelly 3EM. It's based on the work from [NMOptimization](https://community.home-assistant.io/u/NMOptimization). Originally posted on a thread called [My New Motion integration EV Charging from Shell newmotion](https://community.home-assistant.io/t/my-new-motion-integration-ev-charging-from-shell-newmotion/369593/153)
+ESPhome device acting as a Xemex CSMB by simulating a Modbus RTU Slave/Client/Server that can be polled by a master (e.g. a EV Wallbox like Shell Recharge Advanced 3.0) and delivers IREGs and HREGs which can be controlled arbitrarily. Currently I'm including a Home Assistant automation that uses values from my Shelly 3EM. It's based on the work from [NMOptimization](https://community.home-assistant.io/u/NMOptimization). Originally posted on a thread called [My New Motion integration EV Charging from Shell newmotion](https://community.home-assistant.io/t/my-new-motion-integration-ev-charging-from-shell-newmotion/369593/153)
 
-The Xemex CSMB is used to measure the current on up to 3 phases in the home. Based on the actual power consumption, the Shell Recharge 3.0 can decrease or increase the power consumed by the connected car.
+The Xemex CSMB is used to measure the current on up to 3 phases. Based on the actual current measurements, the Shell Recharge 3.0 can decrease or increase the power that can be consumed by the connected car.
 
 ## External Documentation
 
