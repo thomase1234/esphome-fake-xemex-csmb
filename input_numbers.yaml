@@ -31,6 +31,7 @@ input_number:
     max: 60
     step: 1
     initial: 16
+    mode: box
     unit_of_measurement: "A"
     icon: mdi:ev-station
 
