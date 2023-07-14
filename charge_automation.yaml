@@ -1,11 +1,10 @@
-alias: ShellRecharge Regulation
+alias: Chargepoint Current Regulation
 description: ""
 trigger:
   - platform: time_pattern
     seconds: /4
     enabled: true
 action:
-
   - choose:
       - conditions:
           - condition: state
@@ -15,10 +14,16 @@ action:
           - service: input_number.set_value
             data:
               value: >-
-                {% set actualhomepoweruse = states('sensor.shell3em_main_power') | int - states('sensor.shelly3em_laadpaal_power') | int %}
-                {{ states('input_number.main_max_power') | int - actualhomepoweruse }}
+                {% set newcurrent = states('input_number.main_maximal_current') | float(1) - states('sensor.shell3em_main_current') | float(2) * states('sensor.shell3em_main_power_factor') | float(3) + states('sensor.shelly3em_laadpaal_current') | float(2) %}
+                {% if newcurrent < states('input_number.chargepoint_minimal_current') | float(1) -%}
+                {{ states('input_number.chargepoint_minimal_current') | float(1) }}
+                {% elif newcurrent > states('input_number.chargepoint_maximal_current') | float(1) -%}
+                {{ states('input_number.chargepoint_maximal_current') | float(1) }}
+                {%- else -%}
+                {{ newcurrent }}
+                {%- endif %}
             target:
-              entity_id: input_number.shellrecharge_manual_setpoint_power
+              entity_id: input_number.chargepoint_desired_current
       - conditions:
           - condition: state
             entity_id: input_select.charge_mode
@@ -27,34 +32,34 @@ action:
           - service: input_number.set_value
             data:
               value: >-
-                {% set newvalue = states('sensor.shell3em_main_power') | int * -1 + states('sensor.shelly3em_laadpaal_power') | int + 50 %}
-                {% if newvalue < states('input_number.shellrecharge_min_setpoint_power') | int -%}
-                {{ states('input_number.shellrecharge_min_setpoint_power') | int }}
-                {% elif newvalue > states('input_number.shellrecharge_max_setpoint_power') | int -%}
-                {{ states('input_number.shellrecharge_max_setpoint_power') | int }}
+                {% set newcurrent = states('sensor.shelly3em_laadpaal_current') | float(1) - states('sensor.shell3em_main_current') | float(2) * states('sensor.shell3em_main_power_factor') | float(3) + 0.2 %}
+                {% if newcurrent < states('input_number.chargepoint_minimal_current') | float(1) -%}
+                {{ states('input_number.chargepoint_minimal_current') | float(1) }}
+                {% elif newcurrent > states('input_number.chargepoint_maximal_current') | float(1) -%}
+                {{ states('input_number.chargepoint_maximal_current') | float(1) }}
                 {%- else -%}
-                {{ newvalue }}
+                {{ newcurrent }}
                 {%- endif %}
             target:
-              entity_id: input_number.shellrecharge_manual_setpoint_power
+              entity_id: input_number.chargepoint_desired_current
       - conditions:
           - condition: state
             entity_id: input_select.charge_mode
-            state: 500 W From Grid
+            state: 2A From Grid
         sequence:
           - service: input_number.set_value
             data:
               value: >-
-                {% set newvalue = states('sensor.shell3em_main_power') | int * -1 + states('sensor.shelly3em_laadpaal_power') | int + 500 %}
-                {% if newvalue < states('input_number.shellrecharge_min_setpoint_power') | int -%}
-                {{ states('input_number.shellrecharge_min_setpoint_power') | int }}
-                {% elif newvalue > states('input_number.shellrecharge_max_setpoint_power') | int -%}
-                {{ states('input_number.shellrecharge_max_setpoint_power') | int }}
+                {% set newcurrent = states('sensor.shelly3em_laadpaal_current') | float(1) - states('sensor.shell3em_main_current') | float(2) * states('sensor.shell3em_main_power_factor') | float(3) + 2 %}
+                {% if newcurrent < states('input_number.chargepoint_minimal_current') | float(1) -%}
+                {{ states('input_number.chargepoint_minimal_current') | float(1) }}
+                {% elif newcurrent > states('input_number.chargepoint_maximal_current') | float(1) -%}
+                {{ states('input_number.chargepoint_maximal_current') | float(1) }}
                 {%- else -%}
-                {{ newvalue }}
+                {{ newcurrent }}
                 {%- endif %}
             target:
-              entity_id: input_number.shellrecharge_manual_setpoint_power
+              entity_id: input_number.chargepoint_desired_current
       - conditions:
           - condition: state
             entity_id: input_select.charge_mode
@@ -63,43 +68,71 @@ action:
           - service: input_number.set_value
             data:
               value: >-
-                {% set newvalue = states('sensor.sma_ac_power') | int %}
-                {% if newvalue < states('input_number.shellrecharge_min_setpoint_power') | int -%}
-                {{ states('input_number.shellrecharge_min_setpoint_power') | int }}
-                {% elif newvalue > states('input_number.shellrecharge_max_setpoint_power') | int -%}
-                {{ states('input_number.shellrecharge_max_setpoint_power') | int }}
+                {% set newcurrent = states('sensor.sma_grid_phase_1_current') | float(1) %}
+                {% if newcurrent < states('input_number.chargepoint_minimal_current') | float(1) -%}
+                {{ states('input_number.chargepoint_minimal_current') | float(1) }}
+                {% elif newcurrent > states('input_number.chargepoint_maximal_current') | float(1) -%}
+                {{ states('input_number.chargepoint_maximal_current') | float(1) }}
                 {%- else -%}
-                {{ newvalue }}
+                {{ newcurrent }}
                 {%- endif %}
             target:
-              entity_id: input_number.shellrecharge_manual_setpoint_power
+              entity_id: input_number.chargepoint_desired_current
       - conditions:
           - condition: state
             entity_id: input_select.charge_mode
-            state: Disabled
+            state: Manual
+        sequence:
+          - service: input_number.set_value
+            data:
+              value: >-
+                {% set newcurrent = states('input_number.chargepoint_manual_current') | float(1) %}
+                {% if newcurrent < states('input_number.chargepoint_minimal_current') | float(1) -%}
+                {{ states('input_number.chargepoint_minimal_current') | float(1) }}
+                {% elif newcurrent > states('input_number.chargepoint_maximal_current') | float(1) -%}
+                {{ states('input_number.chargepoint_maximal_current') | float(1) }}
+                {%- else -%}
+                {{ newcurrent }}
+                {%- endif %}
+            target:
+              entity_id: input_number.chargepoint_desired_current
+      - conditions:
+          - condition: state
+            entity_id: input_select.charge_mode
+            state: Charging Off
         sequence:
           - service: input_number.set_value
             data:
               value: 0
             target:
-              entity_id: input_number.shellrecharge_manual_setpoint_power
+              entity_id: input_number.chargepoint_desired_current
     enabled: true
-    default:
-      - service: input_number.set_value
-        data:
-          value: 2345
-        target:
-          entity_id: input_number.shellrecharge_manual_setpoint_power
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: >-   ## desired - current + main > max
+              {{states('input_number.chargepoint_desired_current') |float(1) - states('sensor.shelly3em_laadpaal_current') |float(1) + (states('sensor.shell3em_main_current') |float(2)) * states('sensor.shell3em_main_power_factor') | float(3) > states('input_number.main_maximal_current') |float(1) }}
+        sequence:
+          - service: number.set_value
+            data:
+              value: >-
+                {{ states('input_number.main_maximal_current') |float(1) - states('sensor.shell3em_main_current') |float(2) * states('sensor.shell3em_main_power_factor') | float(3) + states('sensor.shelly3em_laadpaal_current') |float(1) }}
+            target:
+              entity_id: input_number.chargepoint_desired_current
+          - service: logbook.log
+            data:
+              name: chargepoint
+              message: MAXING OUT on desired Current
+              entity_id: input_number.main_maximal_current
+    enabled: true
   - choose:
       - conditions:
           - condition: template
             value_template: >-
-              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
-              - (states('sensor.shelly3em_laadpaal_power') |int) > 50}}
+              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) > 0.25 }}
           - condition: template
             value_template: >-
-              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
-              - (states('sensor.shelly3em_laadpaal_power') |int) <= 150}}
+              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) <= 0.75}}
         sequence:
           - service: number.set_value
             data:
@@ -115,12 +148,10 @@ action:
       - conditions:
           - condition: template
             value_template: >-
-              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
-              - (states('sensor.shelly3em_laadpaal_power') |int) > 150}}
+              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) > 0.75 }}
           - condition: template
             value_template: >-
-              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
-              - (states('sensor.shelly3em_laadpaal_power') |int) <= 500}}
+              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) <= 2.5 }}
         sequence:
           - service: number.set_value
             data:
@@ -136,12 +167,10 @@ action:
       - conditions:
           - condition: template
             value_template: >-
-              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
-              - (states('sensor.shelly3em_laadpaal_power') |int) > 500}}
+              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) > 2.5}}
           - condition: template
             value_template: >-
-              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
-              - (states('sensor.shelly3em_laadpaal_power') |int) <= 1500}}
+              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) <= 7.5}}
         sequence:
           - service: number.set_value
             data:
@@ -157,8 +186,7 @@ action:
       - conditions:
           - condition: template
             value_template: >-
-              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
-              - (states('sensor.shelly3em_laadpaal_power') |int) > 1500}}
+              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) > 7.5}}
         sequence:
           - service: number.set_value
             data:
@@ -174,12 +202,10 @@ action:
       - conditions:
           - condition: template
             value_template: >-
-              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
-              - (states('sensor.shelly3em_laadpaal_power') |int) < -50}}
+              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) < - 0.25}}
           - condition: template
             value_template: >-
-              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
-              - (states('sensor.shelly3em_laadpaal_power') |int) >= -150}}
+              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) >= -0.75}}
         sequence:
           - service: number.set_value
             data:
@@ -195,12 +221,10 @@ action:
       - conditions:
           - condition: template
             value_template: >-
-              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
-              - (states('sensor.shelly3em_laadpaal_power') |int) < -150}}
+              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) < -0.75}}
           - condition: template
             value_template: >-
-              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
-              - (states('sensor.shelly3em_laadpaal_power') |int) >= -500}}
+              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) >= -2.5}}
         sequence:
           - service: number.set_value
             data:
@@ -216,12 +240,10 @@ action:
       - conditions:
           - condition: template
             value_template: >-
-              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
-              - (states('sensor.shelly3em_laadpaal_power') |int) < -500}}
+              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) < -2.5}}
           - condition: template
             value_template: >-
-              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
-              - (states('sensor.shelly3em_laadpaal_power') |int) >= -1500}}
+              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) >= -7.5}}
         sequence:
           - service: number.set_value
             data:
@@ -237,8 +259,7 @@ action:
       - conditions:
           - condition: template
             value_template: >-
-              {{states('input_number.shellrecharge_manual_setpoint_power') |int 
-              - (states('sensor.shelly3em_laadpaal_power') |int) < -1500}}
+              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) < -7.5}}
         sequence:
           - service: number.set_value
             data:

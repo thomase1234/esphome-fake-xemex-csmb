@@ -1,0 +1,12 @@
+input_select:
+  charge_mode:
+    name: Charge Mode
+    options:
+      - Max Speed
+      - Avoid Power To Grid
+      - 2A From Grid
+      - Solar only
+      - Manual
+      - Charging Off
+    initial: Max Speed
+    icon: mdi:ev-station
