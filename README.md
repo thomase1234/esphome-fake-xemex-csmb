@@ -44,7 +44,7 @@ https://www.modbustools.com/modbus.html
 - The Shell Recharge 3 Wallbox requests the 3 CT registers every 2 seconds.
 - This table shows how much Watts the connected car would start consuming after setting the CT3 register to a certain A. F.e. When I set CT3 to 18 ( Amps ), the car started consuming 4550 Watt.
 
-![Amd to Consumption](/pictures/amp_to_consumption.png)
+![Amp to Consumption](/pictures/amp_to_consumption.png)
 
 ## Unexplicable behaviour
 
