@@ -5,7 +5,7 @@ trigger:
     seconds: /4
     enabled: true
 action:
-  - choose:
+  - choose:   # start of setting desired current based on charge_mode
       - conditions:
           - condition: state
             entity_id: input_select.charge_mode
@@ -107,7 +107,8 @@ action:
             target:
               entity_id: input_number.chargepoint_desired_current
     enabled: true
-  - choose:
+# End of setting desired current based on charge_mode
+  - choose:   # start of check if not over-amping the main fuse
       - conditions:
           - condition: template
             value_template: >-   ## check if not over-amping the main fuse
@@ -125,7 +126,8 @@ action:
               message: MAXING OUT on desired Current
               entity_id: input_number.main_maximal_current
     enabled: true
-  - choose:
+# End of check if not over-amping the main fuse
+  - choose: # start of adapting the fake Xemex output
       - conditions:
           - condition: template
             value_template: >-
@@ -279,4 +281,5 @@ action:
         target:
           entity_id: number.modbus_server_xemex_ct3current
     enabled: true
+# End of adapting the fake Xemex output
 mode: single
