@@ -24,15 +24,6 @@ chargepoint_maximal_current:  # not required ? This is enforced by chargepoint i
   unit_of_measurement: "A"
   icon: mdi:ev-station
 
-chargepoint_current_limit:   # not required
-  name: Chargepoint Current Limit
-  min: 16
-  max: 60
-  step: 0.1
-  initial: 38.0   # that's my configured limit.
-  unit_of_measurement: "A"
-  icon: mdi:ev-station
-
 chargepoint_manual_current:
   name: Chargepoint Manual Current
   min: 8
