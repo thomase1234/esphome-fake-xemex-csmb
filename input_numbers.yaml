@@ -11,7 +11,7 @@ chargepoint_minimal_current:
   min: 1
   max: 16
   step: 1
-  initial: 8
+  initial: 9
   unit_of_measurement: "A"
   icon: mdi:ev-station
 
