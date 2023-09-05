@@ -34,6 +34,7 @@ https://www.modbustools.com/modbus.html
 4. Add new device in HomeAssistant.
 5. Now you should be able to set the ctXcurrent numbers. When you set them using HomeAssistant, the values are also reported to your Wallbox.
 6. Setup an automation to configure the charge speed. Here you can find a [charge automation](/charge_automation.yaml)
+7. Set the input_number main_maximal_current to the correct value
 
 ## Interesting info
 
@@ -42,9 +43,7 @@ https://www.modbustools.com/modbus.html
 - The real CSMB has 1 CT connected to CT1. Using my custom modbus client, I could see that the register for CT1 contained the actual current. The other to registers ( CT2 and CT3 ) had a non-changing value, which I took over in the ESPHome config.
 - Immediately after booting, the Shell Recharge 3.0 Wallbox first requests the Device Code register (0x4002). It expects '20802' as a response. If not, it'll continue retrying.
 - The Shell Recharge 3 Wallbox requests the 3 CT registers every 2 seconds.
-- This table shows how much Watts the connected car would start consuming after setting the CT3 register to a certain A. F.e. When I set CT3 to 18 ( Amps ), the car started consuming 4550 Watt.
-
-![Amp to Consumption](/pictures/amp_to_consumption.png)
+- You have to know what the max Current ( in Amps ) setting is on your Wallbox. In my case, this was set to 38 Amps. As soon as the fake CSMB starts reporting values higher than 38 Amps, my charging would decrease. Set the input_number main_maximal_current to the correct value.
 
 ## ~~Unexplicable behaviour~~
 
