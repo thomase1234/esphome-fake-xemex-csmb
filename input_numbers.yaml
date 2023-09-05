@@ -33,3 +33,13 @@ main_maximal_current:
   initial: 38
   unit_of_measurement: "A"
   icon: mdi:home
+
+main_manual_current:
+  name: Main Fuse Manual Current
+  min: 10
+  max: 40
+  step: 1
+  initial: 25
+  mode: box
+  unit_of_measurement: "A"
+  icon: mdi:home

@@ -6,7 +6,8 @@ input_select:
       - Avoid Power To Grid
       - 2A From Grid
       - Solar only
-      - Manual
+      - Manual Charge Speed
+      - Manual Max Main
       - Charging Off
     initial: Max Speed
     icon: mdi:ev-station

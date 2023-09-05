@@ -73,12 +73,28 @@ action:
       - conditions:
           - condition: state
             entity_id: input_select.charge_mode
-            state: Manual
+            state: Manual Charge Speed
         sequence:
           - service: input_number.set_value
             data:
               value: >-
                 {% set newcurrent = states('input_number.chargepoint_manual_current') | float(1) %}
+                {% if newcurrent < states('input_number.chargepoint_minimal_current') | float(1) -%}
+                {{ states('input_number.chargepoint_minimal_current') | float(1) }}
+                {%- else -%}
+                {{ newcurrent }}
+                {%- endif %}
+            target:
+              entity_id: input_number.chargepoint_desired_current
+      - conditions:
+          - condition: state
+            entity_id: input_select.charge_mode
+            state: Manual Max Main
+        sequence:
+          - service: input_number.set_value
+            data:
+              value: >-
+                {% set newcurrent = states('input_number.main_manual_current') | float(1) - ( states('sensor.shell3em_main_current') | float(2) * states('sensor.shell3em_main_power_factor') | float(3) - states('sensor.shelly3em_laadpaal_current') | float(1) ) %}
                 {% if newcurrent < states('input_number.chargepoint_minimal_current') | float(1) -%}
                 {{ states('input_number.chargepoint_minimal_current') | float(1) }}
                 {%- else -%}
