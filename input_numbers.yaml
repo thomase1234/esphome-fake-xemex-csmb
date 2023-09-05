@@ -15,15 +15,6 @@ chargepoint_minimal_current:
   unit_of_measurement: "A"
   icon: mdi:ev-station
 
-chargepoint_maximal_current:  # not required ? This is enforced by chargepoint itself. TODO : remove
-  name: Chargepoint Maximal Current
-  min: 16
-  max: 60
-  step: 1
-  initial: 28
-  unit_of_measurement: "A"
-  icon: mdi:ev-station
-
 chargepoint_manual_current:
   name: Chargepoint Manual Current
   min: 8
