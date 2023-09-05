@@ -46,14 +46,11 @@ https://www.modbustools.com/modbus.html
 
 ![Amp to Consumption](/pictures/amp_to_consumption.png)
 
-~~
+## ~~Unexplicable behaviour~~
 
-## Unexplicable behaviour
-
-- I couldn't influence the Wallbox by playing around with CT1. This I cannot explain. The real Xemex CSMB only uses CT1 as far as my [fake Modbus client](https://github.com/thomase1234/esphome-modbus-client-xemex-csmb) showed.
-- I could influence the charge speed by playing with the Current in CT3.
-  That's strange, as my installation is supposed to use the measurements from CT1.
-  ~~
+- ~~I couldn't influence the Wallbox by playing around with CT1. This I cannot explain. The real Xemex CSMB only uses CT1 as far as my [fake Modbus client](https://github.com/thomase1234/esphome-modbus-client-xemex-csmb) showed.~~
+- ~~I could influence the charge speed by playing with the Current in CT3.~~
+  ~~That's strange, as my installation is supposed to use the measurements from CT1.~~
 
 ## Hardware
 
