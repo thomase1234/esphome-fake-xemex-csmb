@@ -45,7 +45,7 @@ https://www.modbustools.com/modbus.html
 - The Shell Recharge 3 Wallbox requests the 3 CT registers every 2 seconds.
 - You have to know what the max Current ( in Amps ) setting is on your Wallbox. In my case, this was set to 38 Amps. As soon as the fake CSMB starts reporting values higher than 38 Amps, my charging would decrease. Set the input_number main_maximal_current to the correct value.
 
-## ~~Unexplicable behaviour~~
+## ~~Unexplicable behaviour~~ This is fixed now.
 
 - ~~I couldn't influence the Wallbox by playing around with CT1. This I cannot explain. The real Xemex CSMB only uses CT1 as far as my [fake Modbus client](https://github.com/thomase1234/esphome-modbus-client-xemex-csmb) showed.~~
 - ~~I could influence the charge speed by playing with the Current in CT3.~~
