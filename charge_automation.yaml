@@ -2,10 +2,10 @@ alias: Chargepoint Current Regulation
 description: ""
 trigger:
   - platform: time_pattern
-    seconds: /4
+    seconds: /2
     enabled: true
 action:
-  - choose:
+  - choose:   # start of setting desired current based on charge_mode
       - conditions:
           - condition: state
             entity_id: input_select.charge_mode
@@ -107,7 +107,8 @@ action:
             target:
               entity_id: input_number.chargepoint_desired_current
     enabled: true
-  - choose:
+# End of setting desired current based on charge_mode
+  - choose:   # start of check if not over-amping the main fuse
       - conditions:
           - condition: template
             value_template: >-   ## check if not over-amping the main fuse
@@ -122,161 +123,35 @@ action:
           - service: logbook.log
             data:
               name: chargepoint
-              message: MAXING OUT on desired Current
+              message: Desired current higher than main_maximal_current
               entity_id: input_number.main_maximal_current
     enabled: true
-  - choose:
+# End of check if not over-amping the main fuse
+
+  - choose:   # start of check if increasing or decreasing
       - conditions:
           - condition: template
-            value_template: >-
-              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) > 0.25 }}
-          - condition: template
-            value_template: >-
-              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) <= 0.75}}
+            value_template: >-   ## if load should be increased
+              {{(states('input_number.chargepoint_desired_current') | float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1) ) ) > 0 }}  
         sequence:
           - service: number.set_value
             data:
               value: >-
-                {% set newvalue = states('number.modbus_server_xemex_ct3current') | float(1) - 0.1 %}
-                {% if newvalue  >= 1 and newvalue <= 40 -%}  
-                {{ newvalue }}
-                {%- else -%}
-                {{ states('number.modbus_server_xemex_ct3current') | float(1) }}
-                {%- endif %}
+                {{ states('input_number.main_maximal_current') | float(1) - (states('input_number.chargepoint_desired_current') | float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1) ) )}}
             target:
-              entity_id: number.modbus_server_xemex_ct3current
+              entity_id: number.modbus_server_xemex_ct1current
       - conditions:
           - condition: template
-            value_template: >-
-              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) > 0.75 }}
-          - condition: template
-            value_template: >-
-              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) <= 2.5 }}
+            value_template: >-   ## if load should be decreased
+              {{(states('input_number.chargepoint_desired_current') | float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1) ) ) <= 0 }}  
         sequence:
           - service: number.set_value
             data:
               value: >-
-                {% set newvalue = states('number.modbus_server_xemex_ct3current') | float(1) - 0.5 %}
-                {% if newvalue  >= 1 and newvalue <= 40 -%} 
-                {{ newvalue }}
-                {%- else -%}
-                {{ states('number.modbus_server_xemex_ct3current') | float(1) }}
-                {%- endif %}
+                {{ states('input_number.main_maximal_current') | float(1) - (states('input_number.chargepoint_desired_current') | float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1) ) )/2}}
             target:
-              entity_id: number.modbus_server_xemex_ct3current
-      - conditions:
-          - condition: template
-            value_template: >-
-              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) > 2.5}}
-          - condition: template
-            value_template: >-
-              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) <= 7.5}}
-        sequence:
-          - service: number.set_value
-            data:
-              value: >-
-                {% set newvalue = states('number.modbus_server_xemex_ct3current') | float(1) - 1 %}
-                {% if newvalue  >= 1 and newvalue <= 40 -%}
-                {{ newvalue }}
-                {%- else -%}
-                {{ states('number.modbus_server_xemex_ct3current') | float(1) }}
-                {%- endif %}
-            target:
-              entity_id: number.modbus_server_xemex_ct3current
-      - conditions:
-          - condition: template
-            value_template: >-
-              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) > 7.5}}
-        sequence:
-          - service: number.set_value
-            data:
-              value: >-
-                {% set newvalue = states('number.modbus_server_xemex_ct3current') | float(1) - 2 %}
-                {% if newvalue  >= 1 and newvalue <= 40 -%}
-                {{ newvalue }}
-                {%- else -%}
-                {{ states('number.modbus_server_xemex_ct3current') | float(1) }}
-                {%- endif %}
-            target:
-              entity_id: number.modbus_server_xemex_ct3current
-      - conditions:
-          - condition: template
-            value_template: >-
-              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) < - 0.25}}
-          - condition: template
-            value_template: >-
-              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) >= -0.75}}
-        sequence:
-          - service: number.set_value
-            data:
-              value: >-
-                {% set newvalue = states('number.modbus_server_xemex_ct3current') | float(1) + 0.1 %}
-                {% if newvalue  >= 1 and newvalue <= 40 -%}
-                {{ newvalue }}
-                {%- else -%}
-                {{ states('number.modbus_server_xemex_ct3current') | float(1) }}
-                {%- endif %}
-            target:
-              entity_id: number.modbus_server_xemex_ct3current
-      - conditions:
-          - condition: template
-            value_template: >-
-              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) < -0.75}}
-          - condition: template
-            value_template: >-
-              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) >= -2.5}}
-        sequence:
-          - service: number.set_value
-            data:
-              value: >-
-                {% set newvalue = states('number.modbus_server_xemex_ct3current') | float(1) + 0.5 %}
-                {% if newvalue  >= 1 and newvalue <= 40 -%}
-                {{ newvalue }}
-                {%- else -%}
-                {{ states('number.modbus_server_xemex_ct3current') | float(1) }}
-                {%- endif %}
-            target:
-              entity_id: number.modbus_server_xemex_ct3current
-      - conditions:
-          - condition: template
-            value_template: >-
-              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) < -2.5}}
-          - condition: template
-            value_template: >-
-              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) >= -7.5}}
-        sequence:
-          - service: number.set_value
-            data:
-              value: >-
-                {% set newvalue = states('number.modbus_server_xemex_ct3current') | float(1) + 1 %}
-                {% if newvalue  >= 1 and newvalue <= 40 -%}
-                {{ newvalue }}
-                {%- else -%}
-                {{ states('number.modbus_server_xemex_ct3current') | float(1) }}
-                {%- endif %}
-            target:
-              entity_id: number.modbus_server_xemex_ct3current
-      - conditions:
-          - condition: template
-            value_template: >-
-              {{states('input_number.chargepoint_desired_current') |float(1) - (states('sensor.shelly3em_laadpaal_current') |float(1)) < -7.5}}
-        sequence:
-          - service: number.set_value
-            data:
-              value: >-
-                {% set newvalue = states('number.modbus_server_xemex_ct3current') | float(1) + 2 %}
-                {% if newvalue  >= 1 and newvalue <= 40 -%}
-                {{ newvalue }}
-                {%- else -%}
-                {{ states('number.modbus_server_xemex_ct3current') | float(1) }}
-                {%- endif %}
-            target:
-              entity_id: number.modbus_server_xemex_ct3current
-    default:
-      - service: number.set_value
-        data:
-          value: "{{ states('number.modbus_server_xemex_ct3current') | float(1) - 0 }}"
-        target:
-          entity_id: number.modbus_server_xemex_ct3current
+              entity_id: number.modbus_server_xemex_ct1current
     enabled: true
+# End of check if not over-amping the main fuse
+
 mode: single
