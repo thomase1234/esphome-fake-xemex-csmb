@@ -61,6 +61,8 @@ Multiplying the 2 previous parameters give me a single number with the total of 
 
 ### Wiring
 
+Note that this show the wiring that I created. Other configurations are possible.
+
 Power: I removed the micro-usb plug from an old USB cable and looked for the Ground (GND) and +5V wires. Using a bread board
 
 - connect the GND wire from the USB cable to both a GND Pin on the ESP32 and the GND Pin on the RS485.
