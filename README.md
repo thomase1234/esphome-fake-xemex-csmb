@@ -43,13 +43,25 @@ https://www.modbustools.com/modbus.html
 - The real CSMB has 1 CT connected to CT1. Using my custom modbus client, I could see that the register for CT1 contained the actual current. The other to registers ( CT2 and CT3 ) had a non-changing value, which I took over in the ESPHome config.
 - Immediately after booting, the Shell Recharge 3.0 Wallbox first requests the Device Code register (0x4002). It expects '20802' as a response. If not, it'll continue retrying.
 - The Shell Recharge 3 Wallbox requests the 3 CT registers every 2 seconds.
-- You have to know what the max Current ( in Amps ) setting is on your Wallbox. In my case, this was set to 38 Amps. As soon as the fake CSMB starts reporting values higher than 38 Amps, my charging would decrease. Set the input_number main_maximal_current to the correct value.
+- You have to know what the max Current ( in Amps ) setting is on your Wallbox. In my case, this was set to 37.8 Amps. As soon as the fake CSMB starts reporting values higher than 37.8 Amps, my charging would decrease. Set the input_number main_maximal_current to the correct value.
 
 ## ~~Unexplicable behaviour~~ This is fixed now.
 
 - ~~I couldn't influence the Wallbox by playing around with CT1. This I cannot explain. The real Xemex CSMB only uses CT1 as far as my [fake Modbus client](https://github.com/thomase1234/esphome-modbus-client-xemex-csmb) showed.~~
 - ~~I could influence the charge speed by playing with the Current in CT3.~~
   ~~That's strange, as my installation is supposed to use the measurements from CT1.~~
+
+## Automation
+
+Some info on the sensors that I used in the [Automation](/charge_automation.yaml).
+
+- shell3em_main_current is the current on my cable between grid and house. This number is always positive, even if my house ( thanks to the pv - solar panels ) is producing more electricity than it consumes. If it reads 5 Amp, it can be that my house is consuming 5 Amp from the grid, or it can be that my house is delivering 5 Amp to the grid.
+
+- shell3em_main_power_factor is the power factor which ranges between -1 and 1. If the number is negative, that means that my house is producing more energy than it consumes which means that the excess energy is delivered to the grid. If the number is positive, the house is consuming from the grid. Usually the value is either very close to 1 when consuming, or very close to -1 when delivering to the grid.
+
+Multiplying the 2 previous parameters give me a single number with the total of Amps consumed. Negative numbers for delivering.
+
+- shelly3em_laadpaal_current is the current on the "laadpaal". "Laadpaal" is Dutch for Wall Charger. Since I know that the Wall Charger will always consume energy, I didn't multiply the number with its corresponding power_factor.
 
 ## Hardware
 
