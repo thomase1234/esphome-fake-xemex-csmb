@@ -86,9 +86,10 @@ modbus_server:
   - id: modbusserver
     uart_id: intmodbus
     address: 1 # slave address
-    #  - I used this module which reqired pins below http://domoticx.com/wp-content/uploads/2018/01/RS485-module-shield.jpg
-#    re_pin: GPIO19 # optional
-#    de_pin: GPIO18 # optional
+    #  - If you're using a RS485 like this one, make sure to set the re_pin and de_pin
+    # http://domoticx.com/wp-content/uploads/2018/01/RS485-module-shield.jpg
+#    re_pin: GPIO17 # optional
+#    de_pin: GPIO16 # optional
 
     holding_registers:
       # I've implemented some of the regs found in this PDF:
