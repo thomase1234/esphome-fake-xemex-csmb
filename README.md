@@ -64,6 +64,7 @@ Multiplying the 2 previous parameters give me a single number with the total of 
 Link to product page on [Azdelivery.de](https://www.az-delivery.de/en/collections/alle-produkte/products/esp32-developmentboard)
 
 ![ESP32 NODEMCU](/pictures/esp32-nodemcu-module-wlan-wifi-development-board-mit-cp2102-nachfolgermodell-zum-esp8266-kompatibel-mit-arduino-872375_400x.webp)
+![Pinout Diagram](/pictures/ESP_-_32_NodeMCU_Developmentboard_Pinout_Diagram.jpg)
 
 ### The RS485 module I used
 
