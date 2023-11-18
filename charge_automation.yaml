@@ -126,11 +126,11 @@ action:
                 {{ states('input_number.main_maximal_current') |float(1) - states('sensor.shell3em_main_current') |float(2) * states('sensor.shell3em_main_power_factor') | float(3) + states('sensor.shelly3em_laadpaal_current') |float(1) }}
             target:
               entity_id: input_number.chargepoint_desired_current
-          - service: logbook.log
-            data:
-              name: chargepoint
-              message: Desired current higher than main_maximal_current
-              entity_id: input_number.main_maximal_current
+#          - service: logbook.log
+#            data:
+#              name: chargepoint
+#              message: Desired current higher than main_maximal_current
+#              entity_id: input_number.main_maximal_current
     enabled: true
 # End of check if not over-amping the main fuse
 
