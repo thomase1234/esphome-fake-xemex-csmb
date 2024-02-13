@@ -63,6 +63,12 @@ In one of my dashboards I created a dropdown menu which allows me to set the cha
 
 ![Charge Mode Selector](/pictures/HomeAssistant_ChargeMode.png)
 
+```
+type: custom:mushroom-select-card
+entity: input_select.charge_mode
+secondary_info: last-changed
+```
+
 ## Hardware
 
 ### Wiring
