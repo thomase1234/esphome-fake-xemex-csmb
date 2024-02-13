@@ -2,7 +2,7 @@
 
 This project allows you to set the charge speed of a Shell Recharge Advanced 3.0 charging point by emulating a Xemex CSMB.
 
-## Working
+## How is this working ?
 
 ESPhome device acting as a Xemex CSMB by simulating a Modbus RTU Slave/Client/Server that can be polled by a master (e.g. a EV Wallbox like Shell Recharge Advanced 3.0) and delivers IREGs and HREGs which can be controlled arbitrarily. Currently I'm including a Home Assistant automation that uses values from my Shelly 3EM. It's based on the work from [NMOptimization](https://community.home-assistant.io/u/NMOptimization). Originally posted on a thread called [My New Motion integration EV Charging from Shell newmotion](https://community.home-assistant.io/t/my-new-motion-integration-ev-charging-from-shell-newmotion/369593/153)
 
@@ -26,7 +26,7 @@ https://my-instructions.com/shellrecharge/advanced-3.0/?locale=en-GB
 https://esphome.io/components/modbus_controller.html  
 https://www.modbustools.com/modbus.html
 
-## Next steps
+## How to set up the hardware ?
 
 1. Connect ESP32 dev board to RS485 module.
 2. Connect RS485 A and B connectors to the A and B wire that goes to the Shell Recharge 3.0 Wallbox.
@@ -45,7 +45,7 @@ https://www.modbustools.com/modbus.html
 - The Shell Recharge 3 Wallbox requests the 3 CT registers every 2 seconds.
 - You have to know what the max Current ( in Amps ) setting is on your Wallbox. In my case, this was set to 37.8 Amps. As soon as the fake CSMB starts reporting values higher than 37.8 Amps, my charging would decrease. Set the input_number main_maximal_current to the correct value.
 
-## Automation
+## How to use the Home Assistant automation ?
 
 Some info on the sensors that I used in the [Automation](/charge_automation.yaml).
 
@@ -56,6 +56,12 @@ Some info on the sensors that I used in the [Automation](/charge_automation.yaml
 Multiplying the 2 previous parameters give me a single number with the total of Amps consumed. Negative numbers for delivering.
 
 - shelly3em_laadpaal_current is the current on the "laadpaal". "Laadpaal" is Dutch for Wall Charger. Since I know that the Wall Charger will always consume energy, I didn't multiply the number with its corresponding power_factor.
+
+### The different Charge Modes
+
+In one of my dashboards I created a dropdown menu which allows me to set the charge mode that is used by the [charge automation](/charge_automation.yaml).
+
+![Charge Mode Selector](/pictures/HomeAssistant_ChargeMode.png)
 
 ## Hardware
 
