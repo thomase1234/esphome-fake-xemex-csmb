@@ -69,6 +69,26 @@ entity: input_select.charge_mode
 secondary_info: last-changed
 ```
 
+#### Max Speed
+
+![Max Speed](/pictures/MaxSpeed.png)
+
+#### 2A From Grid
+
+#### Manual Charge Speed
+
+The Charge speed is set to the value in _input_number.chargepoint_manual_current_ . Note that total consumption can be higher or lower based on other consumers and producers of power. The screemshot was taken at night time, so solar panels didn't produce anything.
+
+![Manual Charge Speed](/pictures/ManualChargeSpeed.png)
+
+#### Manual Max Main
+
+The total house consumption stays at the value in _input_number.main_manual_current_ . Note that it the charge speed will go up or down based on other electrical consumers ( washing machines, toaster,... ) or producers ( typically solar panels or your in-house fusion reactor ).
+
+![Manual Max Main](/pictures/ManualMaxMain.png)
+
+Note on picture: as you can see, the charging session started as _Max Speed_
+
 ## Hardware
 
 ### Wiring
