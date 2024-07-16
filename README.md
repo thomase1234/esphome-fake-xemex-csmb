@@ -44,6 +44,7 @@ https://www.modbustools.com/modbus.html
 - Immediately after booting, the Shell Recharge 3.0 Wallbox first requests the Device Code register (0x4002). It expects '20802' as a response. If not, it'll continue retrying.
 - The Shell Recharge 3 Wallbox requests the 3 CT registers every 2 seconds.
 - You have to know what the max Current ( in Amps ) setting is on your Wallbox. In my case, this was set to 37.8 Amps. As soon as the fake CSMB starts reporting values higher than 37.8 Amps, my charging would decrease. Set the input_number main_maximal_current to the correct value.
+- The wallbox refuses to limit the current to a value lower than 8A. If you try to do so, the wallbox will set its limit to 0A and charging will stop (even if the car supports charging at a lower current).
 
 ## How to use the Home Assistant automation ?
 
