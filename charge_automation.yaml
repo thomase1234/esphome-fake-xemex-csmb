@@ -173,7 +173,14 @@ action:
           - service: number.set_value
             data:
               value: >-
-                {{ states('input_number.main_maximal_current') | float() - (states('input_number.chargepoint_desired_current') | float() - (states('sensor.shelly3em_laadpaal_current') |float() ) )}}
+                {% set newcurrent = states('input_number.main_maximal_current') | float() - (states('input_number.chargepoint_desired_current') | float() - (states('sensor.shelly3em_laadpaal_current') |float() ) ) %}
+                {% if newcurrent < state_attr('number.modbus_server_xemex_ct1current','min') %}
+                {{ state_attr('number.modbus_server_xemex_ct1current','min') }}
+                {% elif newcurrent > state_attr('number.modbus_server_xemex_ct1current','max') %}
+                {{ state_attr('number.modbus_server_xemex_ct1current','max') }}
+                {% else %}
+                {{ newcurrent }}
+                {% endif %}
             target:
               entity_id: number.modbus_server_xemex_ct1current
       - conditions:
@@ -184,7 +191,14 @@ action:
           - service: number.set_value
             data:
               value: >-
-                {{ states('input_number.main_maximal_current') | float() - (states('input_number.chargepoint_desired_current') | float() - (states('sensor.shelly3em_laadpaal_current') |float() ) )/2}}
+                {% set newcurrent = states('input_number.main_maximal_current') | float() - (states('input_number.chargepoint_desired_current') | float() - (states('sensor.shelly3em_laadpaal_current') |float() ) )/2 %}
+                {% if newcurrent < state_attr('number.modbus_server_xemex_ct1current','min') %}
+                {{ state_attr('number.modbus_server_xemex_ct1current','min') }}
+                {% elif newcurrent > state_attr('number.modbus_server_xemex_ct1current','max') %}
+                {{ state_attr('number.modbus_server_xemex_ct1current','max') }}
+                {% else %}
+                {{ newcurrent }}
+                {% endif %}
             target:
               entity_id: number.modbus_server_xemex_ct1current
     enabled: true

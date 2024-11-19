@@ -1,0 +1,10 @@
+{
+    "domain": "esphome_fake_dlbm",
+    "name": "Fake Dynamic Loadbalancing Module",
+    "codeowners": [],
+    "dependencies": [],
+    "documentation": "https://github.com/thomase1234/esphome-fake-xemex-csmb/tree/master/custom_components/esphome_fake_dlbm/",
+    "iot_class": "local_polling",
+    "requirements": [],
+    "version": "0.1.0"
+  }
