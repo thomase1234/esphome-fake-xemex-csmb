@@ -20,7 +20,7 @@ action:
       - conditions:
           - condition: template
             value_template: >-   ## if load should be increased
-              {{(states('input_number.input_number.evcc_desired_current') | float() - (states('sensor.shelly3em_laadpaal_current') |float() ) ) > 0 }}  
+              {{(states('input_number.evcc_desired_current') | float() - (states('sensor.shelly3em_laadpaal_current') |float() ) ) > 0 }}  
         sequence:
           - service: number.set_value
             data:
