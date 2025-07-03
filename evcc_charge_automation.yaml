@@ -1,0 +1,42 @@
+alias: EVCC Chargepoint Current Regulation
+description: ""
+trigger:
+  - platform: time_pattern
+    seconds: /2
+    enabled: true
+action:
+  - choose:   # start of check if increasing or decreasing
+      - conditions:
+          - condition: state
+            entity_id: input_boolean.evcc_enable_charger
+            state: "off"
+        sequence:
+          - action: number.set_value
+            metadata: {}
+            data:
+              value: "50"
+            target:
+              entity_id: number.modbus_server_xemex_ct1current
+      - conditions:
+          - condition: template
+            value_template: >-   ## if load should be increased
+              {{(states('input_number.input_number.evcc_desired_current') | float() - (states('sensor.shelly3em_laadpaal_current') |float() ) ) > 0 }}  
+        sequence:
+          - service: number.set_value
+            data:
+              value: >-
+                {{ states('input_number.main_maximal_current') | float() - (states('input_number.evcc_desired_current') | float() - (states('sensor.shelly3em_laadpaal_current') |float() ) )}}
+            target:
+              entity_id: number.modbus_server_xemex_ct1current
+      - conditions:
+          - condition: template
+            value_template: >-   ## if load should be decreased
+              {{(states('input_number.evcc_desired_current') | float() - (states('sensor.shelly3em_laadpaal_current') |float() ) ) <= 0 }}  
+        sequence:
+          - service: number.set_value
+            data:
+              value: >-
+                {{ states('input_number.main_maximal_current') | float() - (states('input_number.evcc_desired_current') | float() - (states('sensor.shelly3em_laadpaal_current') |float() ) )/2}}
+            target:
+              entity_id: number.modbus_server_xemex_ct1current
+    enabled: true
