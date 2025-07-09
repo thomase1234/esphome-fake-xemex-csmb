@@ -2,7 +2,7 @@ alias: EVCC Chargepoint Current Regulation
 description: ""
 trigger:
   - platform: time_pattern
-    seconds: /2
+    seconds: /1
     enabled: true
 action:
   - choose:   # start of check if increasing or decreasing
